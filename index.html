@@ -1463,6 +1463,9 @@ const panel=document.getElementById('settingsPanel');
 panel.style.display=panel.style.display==='none'?'block':'none';
 }
 
+/* ========== EMBEDDED CLOUD CONFIG ========== */
+var _EMBEDDED_CLOUD={url:"https://wislgkxyyijummswrqjs.supabase.co",key:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indpc2xna3h5eWlqdW1tc3dycWpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1NTIxNjEsImV4cCI6MjA5OTEyODE2MX0.WY4waNrwwd_0HOHD3SjRyLnTJzqZf-Krg9fstEsD9v0"};
+
 /* ========== INIT ========== */
 // Check for embedded cloud config (candidate version)
 if(typeof _EMBEDDED_CLOUD!=='undefined'&&_EMBEDDED_CLOUD&&_EMBEDDED_CLOUD.url){
