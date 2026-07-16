@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>360° 人才综合测评系统</title>
+<title>360° 人才综合测评系统 - 星固科技</title>
 <style>
 :root{--primary:#2563eb;--primary-light:#dbeafe;--primary-dark:#1e40af;--accent:#0d9488;--accent-light:#ccfbf1;--warn:#f59e0b;--danger:#ef4444;--success:#22c55e;--bg:#f1f5f9;--card:#fff;--text:#1e293b;--text-light:#64748b;--border:#e2e8f0;--shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);--shadow-lg:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -2px rgba(0,0,0,.05);--radius:12px}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -175,6 +175,7 @@ body{background:#fff}
 <div class="landing-card">
 <h1>360° 人才综合测评系统</h1>
 <p class="tagline">全方位人才评估 · 科学+观察双轨分析</p>
+<p style="font-size:13px;color:#64748b;margin-top:8px">星固科技（陕西）有限公司</p>
 <button class="role-btn" onclick="startCandidate()">
 <span class="role-icon">📝</span>
 <span class="role-title">我是候选人</span>
@@ -399,6 +400,7 @@ body{background:#fff}
 <div class="report-header">
 <h2 id="rptTitle">人才综合测评报告</h2>
 <p id="rptSubtitle">详细分析版</p>
+<p style="font-size:12px;color:#94a3b8;margin-top:4px">星固科技（陕西）有限公司</p>
 </div>
 <div id="reportContent"></div>
 <div class="btn-group no-print" style="margin:30px 0">
@@ -1290,7 +1292,7 @@ qs.push('在未来3年中，你希望自己在哪些方面获得成长？');
 qs.push('请描述一个你与同事产生分歧并成功解决的案例。');
 let h='<ol style="line-height:2;padding-left:20px">';qs.forEach(q=>{h+=`<li>${q}</li>`;});h+='</ol>';return h;}
 
-function buildReportHTML(d){
+function buildReportHTML(d,forManager){
 const dims=calcDimScores(d);
 const dimNames=Object.keys(dims),dimValues=Object.values(dims);
 const avg=Math.round(dimValues.reduce((a,b)=>a+b,0)/dimValues.length);
@@ -1339,9 +1341,14 @@ h+=`<p><strong>纹身情况：</strong>${d.tattoo}</p>`;
 if(d.generalObs)h+=`<p><strong>整体印象：</strong>${d.generalObs}</p>`;
 h+=`</div>`;}
 h+=`</div>`;
+if(forManager){
 h+=`<div class="card"><h2>🎯 综合分析</h2>${generateComprehensiveAnalysis(d,dims)}</div>`;
+}
 h+=`<div class="card"><h2>💡 发展建议</h2>${generateSuggestions(dims)}</div>`;
+if(forManager){
 h+=`<div class="card"><h2>❓ 建议追问问题</h2>${generateInterviewQuestions(d,dims)}</div>`;
+}
+h+=`<div style="text-align:center;padding:16px 20px;margin:20px 0;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;font-size:13px;color:#64748b;line-height:1.8"><strong>声明：</strong>以上测评结果仅作为个人成长与发展参考，不作为任何评级、薪酬评定或录用决策的依据。</div>`;
 return h;}
 
 function showCandidateReport(result){
@@ -1353,7 +1360,7 @@ rpt.classList.add('active');
 rpt.scrollTop=0;
 document.getElementById('rptTitle').textContent=`${result.name} · 人才综合测评报告`;
 document.getElementById('rptSubtitle').textContent=`${result.position} | ${result.date} | 详细分析版`;
-document.getElementById('reportContent').innerHTML=buildReportHTML(result);
+document.getElementById('reportContent').innerHTML=buildReportHTML(result,false);
 }
 
 /* ========== MANAGER DASHBOARD ========== */
@@ -1413,7 +1420,7 @@ currentViewReportId=id;
 showView('viewManagerReport');
 document.getElementById('mgrRptHeader').textContent=`${r.name} · 测评报告`;
 document.getElementById('mgrRptSub').textContent=`${r.position} | ${r.date}`;
-document.getElementById('mgrReportContent').innerHTML=buildReportHTML(r);
+document.getElementById('mgrReportContent').innerHTML=buildReportHTML(r,true);
 window.scrollTo({top:0,behavior:'smooth'});
 }
 
