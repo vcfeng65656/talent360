@@ -1033,7 +1033,7 @@ let colorRound=0,colorScore=0,colorTotal=5;
 function hslToHex(h,s,l){h=((h%360)+360)%360;s/=100;l/=100;const a=s*Math.min(l,1-l);const f=n=>{const k=(n+h/30)%12;const c=l-a*Math.max(Math.min(k-3,9-k,1),-1);return Math.round(255*c).toString(16).padStart(2,'0');};return`#${f(0)}${f(8)}${f(4)}`;}
 function startColorGame(){colorRound=0;colorScore=0;document.getElementById('colorStartBtn').style.display='none';nextColorRound();}
 function nextColorRound(){
-if(colorRound>=colorTotal){document.getElementById('colorFeedback').innerHTML=`<strong>测试完成！</strong> 得分：${Math.round(colorScore)}/${colorTotal}`;document.getElementById('colorNextBtn').style.display='none';data.colorScore=Math.max(25,Math.round(colorScore/colorTotal*100));return;}
+if(colorRound>=colorTotal){document.getElementById('colorFeedback').innerHTML=`<strong>测试完成！</strong> 得分：${Math.round(colorScore)}/${colorTotal}`;document.getElementById('colorNextBtn').style.display='none';data.colorScore=Math.min(100,Math.max(25,Math.round(colorScore/colorTotal*100)));return;}
 document.getElementById('colorFeedback').textContent='';document.getElementById('colorNextBtn').style.display='none';
 const baseH=Math.floor(Math.random()*360),baseS=50+Math.floor(Math.random()*30),baseL=45+Math.floor(Math.random()*20);
 document.getElementById('baseColor').style.background=hslToHex(baseH,baseS,baseL);
@@ -1094,13 +1094,13 @@ pattern.forEach((e,i)=>{const d=document.createElement('div');d.className='diff-
 if(diffAnswers.includes(i)){d.textContent=diffEmojis2[Math.floor(Math.random()*diffEmojis2.length)];d.dataset.diff='true';d.dataset.idx=i;
 d.onclick=function(){if(!diffStarted)return;if(this.classList.contains('found'))return;this.classList.add('found');diffFound.push(i);
 document.getElementById('diffMsg').innerHTML=`已找到 ${diffFound.length} 处不同`;
-if(diffFound.length===DIFF_COUNT){clearInterval(diffTimer);diffStarted=false;const timeUsed=60-diffTimeLeft;const score=Math.max(20,Math.min(100,Math.round(100-timeUsed*1.5)));data.diffScore=score;
+if(diffFound.length===DIFF_COUNT){clearInterval(diffTimer);diffStarted=false;const timeUsed=60-diffTimeLeft;const score=Math.min(100,Math.max(20,Math.round(100-timeUsed*1.5)));data.diffScore=score;
 document.getElementById('diffMsg').innerHTML=`<strong>全部找到！</strong> 用时 ${timeUsed} 秒，得分：${score}`;}};}
 rightDiv.appendChild(d);});
 document.getElementById('diffInfo').innerHTML=`<div class="game-stat">剩余时间：${diffTimeLeft}s</div><div class="game-stat">找到：0</div>`;
 diffTimer=setInterval(()=>{diffTimeLeft--;
 document.getElementById('diffInfo').innerHTML=`<div class="game-stat">剩余时间：${diffTimeLeft}s</div><div class="game-stat">找到：${diffFound.length}</div>`;
-if(diffTimeLeft<=0){clearInterval(diffTimer);diffStarted=false;const score=Math.max(20,Math.round(diffFound.length/DIFF_COUNT*100));data.diffScore=score;
+if(diffTimeLeft<=0){clearInterval(diffTimer);diffStarted=false;const score=Math.min(100,Math.max(20,Math.round(diffFound.length/DIFF_COUNT*100)));data.diffScore=score;
 document.getElementById('diffMsg').innerHTML=`<strong>时间到！</strong> 找到 ${diffFound.length} 处不同，得分：${score}`;
 rightDiv.querySelectorAll('[data-diff="true"]').forEach(d=>{if(!d.classList.contains('found'))d.classList.add('wrong');});}
 },1000);
@@ -1694,7 +1694,8 @@ const eqBlended=Math.round((d.emotStress&&d.emotStress.length)?(emotDirect*0.6+d
 const stressBlended=Math.round((d.emotStress&&d.emotStress.length)?(stressDirect*0.6+d.stressScore*0.4):d.stressScore);
 const learnBlended=Math.round((d.learnInnov&&d.learnInnov.length)?(learnDirect*0.6+d.learnScore*0.4):d.learnScore);
 const innovBlended=Math.round((d.learnInnov&&d.learnInnov.length)?(innovDirect*0.6+d.innovScore*0.4):d.innovScore);
-return{'性格匹配度':calcMBTIScore(d.mbtiDims),'岗位匹配度':posMatch.score,'身体素质':calcPhysScore(d),'生活健康度':d.lifestyleScore??50,'数字素养':calcAppScore(d),'共情感知力':d.colorScore,'手脑协调能力':d.reactionScore,'观察注意力':d.diffScore,'信息洞察力':d.insightScore??50,'家庭支持度':calcFamilyScore(d),'情绪管理':eqBlended,'抗压能力':stressBlended,'学习成长力':learnBlended,'创新思维':innovBlended};
+const clamp=v=>Math.max(0,Math.min(100,v||50));
+return{'性格匹配度':clamp(calcMBTIScore(d.mbtiDims)),'岗位匹配度':clamp(posMatch.score),'身体素质':clamp(calcPhysScore(d)),'生活健康度':clamp(d.lifestyleScore??50),'数字素养':clamp(calcAppScore(d)),'共情感知力':clamp(d.colorScore),'手脑协调能力':clamp(d.reactionScore),'观察注意力':clamp(d.diffScore),'信息洞察力':clamp(d.insightScore??50),'家庭支持度':clamp(calcFamilyScore(d)),'情绪管理':clamp(eqBlended),'抗压能力':clamp(stressBlended),'学习成长力':clamp(learnBlended),'创新思维':clamp(innovBlended)};
 }
 
 /* ========== RADAR CHART ========== */
