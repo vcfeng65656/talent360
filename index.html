@@ -233,8 +233,12 @@ body{background:#fff}
 <div class="form-group"><label>年龄</label><input class="form-input" id="candAge" type="number" placeholder="请输入年龄" min="18" max="65"></div>
 </div>
 <div class="form-row">
-<div class="form-group"><label>出生日期</label><input class="form-input" id="candBirth" type="date"></div>
+<div class="form-group"><label>出生日期</label><input class="form-input" id="candBirth" type="date" onchange="autoCalcZodiac()"></div>
+<div class="form-group"><label>血型</label><select class="form-input" id="candBlood" onchange="const ob=document.getElementById('obsBlood');if(ob)ob.value=this.value"><option value="">请选择</option><option>A型</option><option>B型</option><option>O型</option><option>AB型</option><option>不确定</option></select></div>
+</div>
+<div class="form-row">
 <div class="form-group"><label>学历</label><select class="form-input" id="candEdu"><option value="">请选择</option><option>高中及以下</option><option>大专</option><option>本科</option><option>硕士</option><option>博士</option></select></div>
+<div class="form-group"></div>
 </div>
 <div class="form-row">
 <div class="form-group"><label>身高 (cm)</label><input class="form-input" id="candHeight" type="number" placeholder="cm" min="140" max="220"></div>
@@ -248,8 +252,9 @@ body{background:#fff}
 <div class="section" data-step="1">
 <div class="card">
 <h2>🧠 MBTI 性格类型测评</h2>
-<p class="desc">请候选人根据自身真实情况作答，共12题，每题选择最符合自己的选项。</p>
+<p class="desc">请候选人根据自身真实情况作答，共20题，每题选择最符合自己的选项。</p>
 <div id="mbtiContainer"></div>
+<div id="mbtiProgress" style="text-align:center;font-size:13px;color:#64748b;margin-top:12px"></div>
 </div>
 <div class="nav-buttons"><button class="btn btn-outline" onclick="goStep(0)">← 上一步</button><button class="btn btn-primary" onclick="goStep(2)">下一步 →</button></div>
 </div>
@@ -258,7 +263,7 @@ body{background:#fff}
 <div class="section" data-step="2">
 <div class="card">
 <h2>🏃 生活方式与习惯自评</h2>
-<p class="desc">请候选人如实填写以下问题，没有对错之分。</p>
+<p class="desc">请候选人如实填写以下问题，没有对错之分。多选请勾选所有符合的选项。</p>
 <div class="form-group">
 <label>运动频率</label>
 <div class="radio-group">
@@ -280,8 +285,116 @@ body{background:#fff}
 <div class="radio-opt"><input type="checkbox" name="exType" id="et6" value="其他"><label for="et6">其他</label></div>
 </div>
 </div>
-<div style="border-top:1px dashed var(--border);margin:24px 0;padding-top:20px">
-<p style="font-size:13px;color:var(--text-light);margin-bottom:16px">以下为补充参考信息（选填，不计入评分）</p>
+<div style="border-top:1px dashed var(--border);margin:20px 0;padding-top:20px">
+<div class="form-group">
+<label>睡眠习惯（可多选）</label>
+<div class="radio-group">
+<div class="radio-opt"><input type="checkbox" name="sleep" id="sl1" value="早睡"><label for="sl1">22点前入睡</label></div>
+<div class="radio-opt"><input type="checkbox" name="sleep" id="sl2" value="正常"><label for="sl2">23-24点入睡</label></div>
+<div class="radio-opt"><input type="checkbox" name="sleep" id="sl3" value="晚睡"><label for="sl3">1点后入睡</label></div>
+<div class="radio-opt"><input type="checkbox" name="sleep" id="sl4" value="充足"><label for="sl4">睡7-8小时</label></div>
+<div class="radio-opt"><input type="checkbox" name="sleep" id="sl5" value="不足"><label for="sl5">睡不足6小时</label></div>
+<div class="radio-opt"><input type="checkbox" name="sleep" id="sl6" value="午休"><label for="sl6">有午休习惯</label></div>
+</div>
+</div>
+<div class="form-group">
+<label>饮食习惯（可多选）</label>
+<div class="radio-group">
+<div class="radio-opt"><input type="checkbox" name="diet" id="dt1" value="规律"><label for="dt1">三餐规律</label></div>
+<div class="radio-opt"><input type="checkbox" name="diet" id="dt2" value="健康"><label for="dt2">注重营养搭配</label></div>
+<div class="radio-opt"><input type="checkbox" name="diet" id="dt3" value="外卖"><label for="dt3">经常点外卖</label></div>
+<div class="radio-opt"><input type="checkbox" name="diet" id="dt4" value="自己做"><label for="dt4">自己做饭</label></div>
+<div class="radio-opt"><input type="checkbox" name="diet" id="dt5" value="不吃早餐"><label for="dt5">经常不吃早餐</label></div>
+<div class="radio-opt"><input type="checkbox" name="diet" id="dt6" value="控制"><label for="dt6">有饮食控制/减脂计划</label></div>
+</div>
+</div>
+<div class="form-group">
+<label>业余兴趣爱好（可多选）</label>
+<div class="radio-group">
+<div class="radio-opt"><input type="checkbox" name="hobby" id="hb1" value="阅读"><label for="hb1">阅读</label></div>
+<div class="radio-opt"><input type="checkbox" name="hobby" id="hb2" value="音乐"><label for="hb2">音乐</label></div>
+<div class="radio-opt"><input type="checkbox" name="hobby" id="hb3" value="旅行"><label for="hb3">旅行</label></div>
+<div class="radio-opt"><input type="checkbox" name="hobby" id="hb4" value="游戏"><label for="hb4">游戏</label></div>
+<div class="radio-opt"><input type="checkbox" name="hobby" id="hb5" value="运动"><label for="hb5">运动健身</label></div>
+<div class="radio-opt"><input type="checkbox" name="hobby" id="hb6" value="烹饪"><label for="hb6">烹饪</label></div>
+<div class="radio-opt"><input type="checkbox" name="hobby" id="hb7" value="摄影"><label for="hb7">摄影/视频</label></div>
+<div class="radio-opt"><input type="checkbox" name="hobby" id="hb8" value="社交"><label for="hb8">社交聚会</label></div>
+</div>
+</div>
+<div class="form-group">
+<label>社交活跃度（可多选）</label>
+<div class="radio-group">
+<div class="radio-opt"><input type="checkbox" name="social" id="sc1" value="线上活跃"><label for="sc1">线上社群活跃</label></div>
+<div class="radio-opt"><input type="checkbox" name="social" id="sc2" value="线下活跃"><label for="sc2">经常线下聚会</label></div>
+<div class="radio-opt"><input type="checkbox" name="social" id="sc3" value="独处"><label for="sc3">更喜欢独处</label></div>
+<div class="radio-opt"><input type="checkbox" name="social" id="sc4" value="小圈子"><label for="sc4">维持少数深交</label></div>
+<div class="radio-opt"><input type="checkbox" name="social" id="sc5" value="志愿"><label for="sc5">参与志愿/公益活动</label></div>
+</div>
+</div>
+<div class="form-group">
+<label>学习习惯（可多选）</label>
+<div class="radio-group">
+<div class="radio-opt"><input type="checkbox" name="learning" id="ln1" value="每天学"><label for="ln1">每天学习30分钟+</label></div>
+<div class="radio-opt"><input type="checkbox" name="learning" id="ln2" value="课程"><label for="ln2">在线上/线下上课</label></div>
+<div class="radio-opt"><input type="checkbox" name="learning" id="ln3" value="读书"><label for="ln3">每月至少读1本书</label></div>
+<div class="radio-opt"><input type="checkbox" name="learning" id="ln4" value="考证"><label for="ln4">考取专业证书</label></div>
+<div class="radio-opt"><input type="checkbox" name="learning" id="ln5" value="分享"><label for="ln5">写博客/做知识分享</label></div>
+<div class="radio-opt"><input type="checkbox" name="learning" id="ln6" value="不学习"><label for="ln6">工作之外很少学习</label></div>
+</div>
+</div>
+</div>
+<div style="border-top:1px dashed var(--border);margin:20px 0;padding-top:20px">
+<p style="font-size:13px;color:var(--text-light);margin-bottom:12px">以下为您对自身能力的评估，请勾选所有符合的选项</p>
+<div class="form-group">
+<label>数字工具能力（可多选）</label>
+<div class="radio-group">
+<div class="radio-opt"><input type="checkbox" name="digSkill" id="ds1" value="办公"><label for="ds1">熟练使用Office/WPS</label></div>
+<div class="radio-opt"><input type="checkbox" name="digSkill" id="ds2" value="协作"><label for="ds2">使用协作工具（飞书/钉钉/Notion）</label></div>
+<div class="radio-opt"><input type="checkbox" name="digSkill" id="ds3" value="数据"><label for="ds3">会数据分析/Excel高级功能</label></div>
+<div class="radio-opt"><input type="checkbox" name="digSkill" id="ds4" value="编程"><label for="ds4">会编程或自动化工具</label></div>
+<div class="radio-opt"><input type="checkbox" name="digSkill" id="ds5" value="设计"><label for="ds5">会使用设计工具（PS/Figma）</label></div>
+<div class="radio-opt"><input type="checkbox" name="digSkill" id="ds6" value="AI"><label for="ds6">会使用AI工具辅助工作</label></div>
+<div class="radio-opt"><input type="checkbox" name="digSkill" id="ds7" value="基础"><label for="ds7">仅会基本手机/电脑操作</label></div>
+</div>
+</div>
+<div class="form-group">
+<label>情绪与压力管理（可多选）</label>
+<div class="radio-group">
+<div class="radio-opt"><input type="checkbox" name="emotStress" id="es1" value="觉察"><label for="es1">能觉察自己的情绪变化</label></div>
+<div class="radio-opt"><input type="checkbox" name="emotStress" id="es2" value="调节"><label for="es2">有固定的情绪调节方式（运动/冥想等）</label></div>
+<div class="radio-opt"><input type="checkbox" name="emotStress" id="es3" value="冷静"><label for="es3">遇到突发状况能保持冷静</label></div>
+<div class="radio-opt"><input type="checkbox" name="emotStress" id="es4" value="高压ok"><label for="es4">适应高压工作节奏</label></div>
+<div class="radio-opt"><input type="checkbox" name="emotStress" id="es5" value="易焦虑"><label for="es5">容易焦虑或情绪波动大</label></div>
+<div class="radio-opt"><input type="checkbox" name="emotStress" id="es6" value="回避"><label for="es6">倾向回避冲突和压力</label></div>
+<div class="radio-opt"><input type="checkbox" name="emotStress" id="es7" value="影响"><label for="es7">压力会影响睡眠或食欲</label></div>
+</div>
+</div>
+<div class="form-group">
+<label>学习与创新能力（可多选）</label>
+<div class="radio-group">
+<div class="radio-opt"><input type="checkbox" name="learnInnov" id="li1" value="主动学"><label for="li1">主动学习新技能/知识</label></div>
+<div class="radio-opt"><input type="checkbox" name="learnInnov" id="li2" value="复盘"><label for="li2">习惯做完事后复盘总结</label></div>
+<div class="radio-opt"><input type="checkbox" name="learnInnov" id="li3" value="跨界"><label for="li3">喜欢了解其他领域的知识</label></div>
+<div class="radio-opt"><input type="checkbox" name="learnInnov" id="li4" value="新点子"><label for="li4">经常冒出新的想法和创意</label></div>
+<div class="radio-opt"><input type="checkbox" name="learnInnov" id="li5" value="改进"><label for="li5">喜欢改进现有流程和方法</label></div>
+<div class="radio-opt"><input type="checkbox" name="learnInnov" id="li6" value="质疑"><label for="li6">敢于质疑常规做法</label></div>
+<div class="radio-opt"><input type="checkbox" name="learnInnov" id="li7" value="求稳"><label for="li7">更喜欢用成熟稳定的方法</label></div>
+</div>
+</div>
+<div class="form-group">
+<label>家庭与成长环境（可多选）</label>
+<div class="radio-group">
+<div class="radio-opt"><input type="checkbox" name="familyEnv" id="fe1" value="支持"><label for="fe1">家人支持我的职业选择</label></div>
+<div class="radio-opt"><input type="checkbox" name="familyEnv" id="fe2" value="鼓励"><label for="fe2">成长中被鼓励探索和表达</label></div>
+<div class="radio-opt"><input type="checkbox" name="familyEnv" id="fe3" value="独立"><label for="fe3">较早培养独立决策能力</label></div>
+<div class="radio-opt"><input type="checkbox" name="familyEnv" id="fe4" value="压力"><label for="fe4">家庭期望给我较大压力</label></div>
+<div class="radio-opt"><input type="checkbox" name="familyEnv" id="fe5" value="经济ok"><label for="fe5">家庭经济条件允许自由择业</label></div>
+<div class="radio-opt"><input type="checkbox" name="familyEnv" id="fe6" value="负担"><label for="fe6">需要承担家庭经济责任</label></div>
+</div>
+</div>
+</div>
+<div style="border-top:1px dashed var(--border);margin:20px 0;padding-top:20px">
+<p style="font-size:13px;color:var(--text-light);margin-bottom:16px">以下为补充参考信息（选填）</p>
 <div class="form-group">
 <label>您最常用的APP有哪些？（请列举3-5个）</label>
 <p class="hint">如：微信、抖音、得到、知乎、GitHub、Notion等</p>
@@ -392,7 +505,18 @@ body{background:#fff}
 <p class="desc">以下每对描述都有各自的优点。请选择<strong>更像你</strong>的那一个——两个选项没有好坏之分。</p>
 <div id="fcContainer"></div>
 </div>
-<div class="nav-buttons"><button class="btn btn-outline" onclick="goStep(7)">← 上一步</button><button class="btn btn-accent" onclick="submitAssessment()">🎯 提交并生成报告</button></div>
+<div class="nav-buttons"><button class="btn btn-outline" onclick="goStep(7)">← 上一步</button><button class="btn btn-primary" onclick="goStep(9)">下一步 →</button></div>
+</div>
+
+<!-- STEP 9: 霍兰德职业兴趣 -->
+<div class="section" data-step="9">
+<div class="card">
+<h2>🧭 职业兴趣探索（霍兰德模型）</h2>
+<p class="desc">以下描述了一些活动或工作场景。请根据你的真实感受，选择你对每项的喜好程度（1=非常不喜欢，5=非常喜欢）。没有对错之分。</p>
+<div id="hollandContainer"></div>
+<div id="hollandProgress" style="text-align:center;font-size:13px;color:#64748b;margin-top:12px"></div>
+</div>
+<div class="nav-buttons"><button class="btn btn-outline" onclick="goStep(8)">← 上一步</button><button class="btn btn-accent" onclick="submitAssessment()">🎯 提交并生成报告</button></div>
 </div>
 
 <!-- CANDIDATE REPORT -->
@@ -506,7 +630,7 @@ CREATE POLICY "allow_delete" ON results FOR DELETE USING (true);</textarea>
 <div style="background:#fff;border-radius:16px;padding:32px;max-width:600px;width:92%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 40px rgba(0,0,0,.2)">
 <h3 style="margin-bottom:4px;color:var(--primary-dark)">👁️ 面试官观察记录</h3>
 <p style="font-size:13px;color:var(--text-light);margin-bottom:16px">候选人：<strong id="obsCandName"></strong></p>
-<div class="interviewer-note">💡 以下项目由面试官根据面试过程中的观察填写，作为辅助参考维度。星座和属相可根据出生日期自动计算。</div>
+<div class="interviewer-note">💡 血型、星座、属相已优先从候选人「基本信息」中采集并自动预填。如候选人未填或信息有误，可在此处覆盖；其他观察项由面试官根据面试过程填写。</div>
 <div class="form-row">
 <div class="form-group"><label>血型</label><select class="form-input" id="obsBlood"><option value="">请选择</option><option>A型</option><option>B型</option><option>O型</option><option>AB型</option><option>不确定</option></select></div>
 <div class="form-group"><label>星座</label><select class="form-input" id="obsZodiac"><option value="">自动计算或选择</option><option>白羊座</option><option>金牛座</option><option>双子座</option><option>巨蟹座</option><option>狮子座</option><option>处女座</option><option>天秤座</option><option>天蝎座</option><option>射手座</option><option>摩羯座</option><option>水瓶座</option><option>双鱼座</option></select></div>
@@ -560,7 +684,7 @@ CREATE POLICY "allow_delete" ON results FOR DELETE USING (true);</textarea>
 
 <script>
 /* ========== CONSTANTS & STATE ========== */
-const STEPS=['基本信息','MBTI测评','生活方式','情感感知','手脑协调','找差异','信息洞察','情境判断','工作风格'];
+const STEPS=['基本信息','MBTI测评','生活方式','情感感知','手脑协调','找差异','信息洞察','情境判断','工作风格','职业兴趣'];
 const STORAGE_KEY='talent360_results';
 const PW_KEY='talent360_password';
 const DEFAULT_PW='admin123';
@@ -736,6 +860,15 @@ alert('密码已更新！');
 
 /* ========== CANDIDATE FLOW ========== */
 function startCandidate(){
+// Reset all global state
+Object.keys(data).forEach(k=>delete data[k]);
+Object.keys(hollandAnswers).forEach(k=>delete hollandAnswers[k]);
+Object.keys(mbtiAnswers).forEach(k=>delete mbtiAnswers[k]);
+insightRound=0;insightScore=0;insightQuestions=[];
+data.colorScore=0;data.reactionScore=0;data.diffScore=0;
+// 重置基本信息表单
+['candName','candPos','candGender','candAge','candBirth','candBlood','candEdu','candHeight','candWeight'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+renderHolland();renderMBTI();renderSJT();renderFC();
 showView('viewAssessment');
 // Reset all sections to initial state
 document.querySelectorAll('.section').forEach(s=>{s.classList.remove('active','slide-left','slide-right','no-transition');});
@@ -810,14 +943,17 @@ const r=results.find(x=>x.id===id);
 if(!r)return;
 obsTargetId=id;
 document.getElementById('obsCandName').textContent=`${r.name} — ${r.position}`;
-document.getElementById('obsBlood').value=r.blood||'';
-document.getElementById('obsZodiac').value=r.zodiac||'';
-document.getElementById('obsChinese').value=r.chinese||'';
+// 血型：优先已保存值，其次候选人当前表单选择
+const liveBlood=document.getElementById('candBlood')?document.getElementById('candBlood').value:'';
+document.getElementById('obsBlood').value=r.blood||liveBlood||'';
+// 星座/属相：先按出生日期自动推算，再用已保存值覆盖（保存优先）
+autoCalcZodiac(r.birth);
+if(r.zodiac)document.getElementById('obsZodiac').value=r.zodiac;
+if(r.chinese)document.getElementById('obsChinese').value=r.chinese;
 document.getElementById('obsTattoo').value=r.tattoo||'';
 document.getElementById('obsFace').value=r.faceObs||'';
 document.getElementById('obsHand').value=r.handObs||'';
 document.getElementById('obsGeneral').value=r.generalObs||'';
-autoCalcZodiac(r.birth);
 document.getElementById('obsOverlay').classList.add('show');
 }
 function closeObsModal(){document.getElementById('obsOverlay').classList.remove('show');obsTargetId=null;}
@@ -832,6 +968,8 @@ faceObs:document.getElementById('obsFace').value||'',
 handObs:document.getElementById('obsHand').value||'',
 generalObs:document.getElementById('obsGeneral').value||''
 };
+// 双向同步：管理端改动血型时回写到候选人表单（同一会话下保持一致）
+const cb=document.getElementById('candBlood');if(cb&&obsData.blood)cb.value=obsData.blood;
 await updateObserverData(obsTargetId,obsData);
 closeObsModal();
 await renderDashboard();
@@ -843,15 +981,23 @@ const mbtiQuestions=[
 {dim:'EI',text:'在社交场合中，你通常会：',a:{t:'主动与人交流，享受认识新朋友',v:'E'},b:{t:'更倾向于与熟悉的人交流',v:'I'}},
 {dim:'EI',text:'周末休息时，你更想：',a:{t:'和朋友一起出去活动',v:'E'},b:{t:'一个人安静地待着或做自己的事',v:'I'}},
 {dim:'EI',text:'在团队讨论中，你通常：',a:{t:'积极发言，喜欢头脑风暴',v:'E'},b:{t:'先思考再发言，更喜欢深入一对一交流',v:'I'}},
+{dim:'EI',text:'工作遇到瓶颈时，你更倾向：',a:{t:'找人讨论，在交流中找灵感',v:'E'},b:{t:'先独自思考清楚再寻求反馈',v:'I'}},
+{dim:'EI',text:'你更享受的状态是：',a:{t:'在一群人中活跃互动',v:'E'},b:{t:'在安静环境中专注投入',v:'I'}},
 {dim:'SN',text:'你更关注：',a:{t:'具体的事实和细节',v:'S'},b:{t:'整体的概念和可能性',v:'N'}},
 {dim:'SN',text:'解决问题时，你倾向于：',a:{t:'依靠过去的经验和既定方法',v:'S'},b:{t:'寻找新的创新方案',v:'N'}},
 {dim:'SN',text:'你更欣赏：',a:{t:'务实、脚踏实地的人',v:'S'},b:{t:'有创意、天马行空的人',v:'N'}},
+{dim:'SN',text:'做汇报时，你更倾向：',a:{t:'用数据、图表、具体案例说话',v:'S'},b:{t:'用愿景、趋势、未来方向来阐述',v:'N'}},
+{dim:'SN',text:'阅读一本书时，你更关注：',a:{t:'作者讲了什么事实、提供了哪些证据',v:'S'},b:{t:'作者想表达什么思想、有什么启发',v:'N'}},
 {dim:'TF',text:'做决策时，你更看重：',a:{t:'逻辑分析和客观事实',v:'T'},b:{t:'人际和谐和他人感受',v:'F'}},
 {dim:'TF',text:'面对冲突时，你倾向于：',a:{t:'就事论事，追求公平',v:'T'},b:{t:'考虑各方感受，寻求共识',v:'F'}},
 {dim:'TF',text:'你更认同：',a:{t:'真话即使伤人也是必要的',v:'T'},b:{t:'善意的谎言有时更好',v:'F'}},
+{dim:'TF',text:'团队里有人犯了明显错误，你更可能：',a:{t:'直接指出问题并提出改进方案',v:'T'},b:{t:'先私下沟通，照顾对方情绪再谈问题',v:'F'}},
+{dim:'TF',text:'评价一位同事的工作时，你更看重：',a:{t:'任务完成的质量和效率',v:'T'},b:{t:'他给团队带来的氛围和支持',v:'F'}},
 {dim:'JP',text:'面对任务截止日期，你通常：',a:{t:'提前规划，按时完成',v:'J'},b:{t:'临近截止时效率最高',v:'P'}},
 {dim:'JP',text:'你的工作桌面通常是：',a:{t:'整洁有序，物品归类',v:'J'},b:{t:'看似凌乱但自己知道在哪',v:'P'}},
-{dim:'JP',text:'对于旅行，你更喜欢：',a:{t:'提前做好详细行程规划',v:'J'},b:{t:'只定大方向，随机应变',v:'P'}}
+{dim:'JP',text:'对于旅行，你更喜欢：',a:{t:'提前做好详细行程规划',v:'J'},b:{t:'只定大方向，随机应变',v:'P'}},
+{dim:'JP',text:'项目进行中遇到新机会，你更倾向：',a:{t:'按原计划推进，避免节外生枝',v:'J'},b:{t:'灵活调整，抓住更好的可能',v:'P'}},
+{dim:'JP',text:'你对待待办清单的方式是：',a:{t:'列出清单并逐一打勾，享受完成感',v:'J'},b:{t:'心里有数即可，根据当下状态选择做哪件',v:'P'}}
 ];
 const mbtiAnswers={};
 function renderMBTI(){
@@ -863,10 +1009,12 @@ div.innerHTML=`<div class="q-text">${qi+1}. ${q.text}</div><div class="opts">
 <div class="opt" onclick="selectMBTI(this,${qi},'${q.b.v}')">${q.b.t}</div></div>`;
 c.appendChild(div);
 });
+const p=document.getElementById('mbtiProgress');if(p)p.textContent=`共 ${mbtiQuestions.length} 题，已完成 0/${mbtiQuestions.length}`;
 }
 function selectMBTI(el,qi,val){
 el.parentElement.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
 el.classList.add('selected');mbtiAnswers[qi]=val;
+const p=document.getElementById('mbtiProgress');if(p)p.textContent=`共 ${mbtiQuestions.length} 题，已完成 ${Object.keys(mbtiAnswers).length}/${mbtiQuestions.length}`;
 }
 function calcMBTI(){
 const scores={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
@@ -952,14 +1100,32 @@ rightDiv.querySelectorAll('[data-diff="true"]').forEach(d=>{if(!d.classList.cont
 }
 
 /* ========== INSIGHT TEST ========== */
-const insightQuestions=[
+const insightPool=[
 {q:'观察数列：2, 6, 12, 20, 30, ?',opts:['36','40','42','48'],ans:2},
 {q:'观察数列：1, 1, 2, 3, 5, 8, ?',opts:['11','12','13','15'],ans:2},
 {q:'观察数列：2, 4, 8, 16, 32, ?',opts:['40','48','56','64'],ans:3},
-{q:'观察数列：100, 95, 100, 90, 100, 85, ?',opts:['75','80','95','100'],ans:3}
+{q:'观察数列：100, 95, 100, 90, 100, 85, ?',opts:['75','80','95','100'],ans:3},
+{q:'观察数列：3, 9, 27, 81, ?',opts:['162','243','189','324'],ans:1},
+{q:'观察数列：1, 4, 9, 16, 25, ?',opts:['30','33','36','49'],ans:2},
+{q:'观察数列：1, 3, 6, 10, 15, ?',opts:['18','20','21','25'],ans:2},
+{q:'如果所有A是B，所有B是C，那么所有A是？',opts:['C','B','不确定','以上都不对'],ans:0},
+{q:'观察数列：2, 3, 5, 7, 11, ?',opts:['12','13','15','17'],ans:1},
+{q:'观察数列：1, 2, 4, 7, 11, ?',opts:['14','15','16','18'],ans:2},
+{q:'甲比乙大5岁，乙比丙大3岁，甲比丙大几岁？',opts:['5','6','7','8'],ans:3},
+{q:'观察数列：64, 32, 16, 8, ?',opts:['2','4','6','0'],ans:1},
+{q:'观察数列：1, 1, 2, 6, 24, ?',opts:['48','72','120','144'],ans:2},
+{q:'一个时钟3点敲3下用时6秒，12点敲12下用时多少秒？',opts:['24秒','33秒','36秒','22秒'],ans:1},
+{q:'观察规律：AZ, BY, CX, ?',opts:['DW','DV','EW','DX'],ans:0}
 ];
-let insightRound=0,insightScore=0;
-function startInsightTest(){insightRound=0;insightScore=0;document.getElementById('insightStartBtn').style.display='none';renderInsightQ();}
+let insightQuestions=[],insightRound=0,insightScore=0;
+function startInsightTest(){
+insightRound=0;insightScore=0;
+const shuffled=[...insightPool].sort(()=>Math.random()-0.5);
+insightQuestions=shuffled.slice(0,5);
+document.getElementById('insightStartBtn').style.display='none';
+document.querySelector('.section[data-step="6"] .desc').textContent=`请观察以下数列或信息组合，找出其中的规律并选择正确答案。共5题。`;
+renderInsightQ();
+}
 function renderInsightQ(){
 if(insightRound>=insightQuestions.length){
 document.getElementById('insightFeedback').innerHTML=`<strong>测试完成！</strong> 答对 ${insightScore}/${insightQuestions.length} 题`;
@@ -1121,6 +1287,108 @@ workPref:Object.keys(workPrefCounts).length?Object.entries(workPrefCounts).sort(
 };
 }
 
+/* ========== HOLLAND RIASEC ========== */
+const hollandQuestions=[
+{type:'R',q:'修理或组装机械设备、电子设备'},
+{type:'R',q:'从事木工、园艺、户外体力劳动'},
+{type:'R',q:'操作仪器、工具或驾驶车辆'},
+{type:'R',q:'调试硬件、布线或搭建实验装置'},
+{type:'R',q:'拆解、研究日常物品的工作原理'},
+{type:'I',q:'研究科学问题或进行实验分析'},
+{type:'I',q:'阅读学术论文或技术文献'},
+{type:'I',q:'解决复杂的数学或逻辑难题'},
+{type:'I',q:'用统计或建模分析真实世界的数据'},
+{type:'I',q:'探索未知问题、提出并验证假设'},
+{type:'A',q:'绘画、摄影或进行艺术创作'},
+{type:'A',q:'演奏乐器或参与音乐/表演活动'},
+{type:'A',q:'设计海报、室内装饰或时尚搭配'},
+{type:'A',q:'写作诗歌、小说或创意文案'},
+{type:'A',q:'策划视觉风格或艺术主题的活动'},
+{type:'S',q:'帮助他人解决困难或提供心理辅导'},
+{type:'S',q:'教导他人学习新知识或技能'},
+{type:'S',q:'参与志愿者活动或社区服务'},
+{type:'S',q:'倾听朋友的烦恼并给予情绪支持'},
+{type:'S',q:'组织小组讨论或带领成长工作坊'},
+{type:'E',q:'带领团队完成项目或组织活动'},
+{type:'E',q:'推销产品或说服他人接受观点'},
+{type:'E',q:'制定商业计划或管理运营'},
+{type:'E',q:'谈判合同、争取资源或达成合作'},
+{type:'E',q:'策划营销活动或发起一场推广'},
+{type:'C',q:'整理数据、制作表格或归档资料'},
+{type:'C',q:'按流程精确地完成财务核算或审计'},
+{type:'C',q:'制定详细的工作计划或日程安排'},
+{type:'C',q:'校对文件、检查错误或核对清单'},
+{type:'C',q:'维护档案系统或编写标准化操作手册'}
+];
+const hollandAnswers={};
+function renderHolland(){
+const c=document.getElementById('hollandContainer');if(!c)return;c.innerHTML='';
+hollandQuestions.forEach((q,qi)=>{
+const div=document.createElement('div');div.className='mbti-q';div.style.marginBottom='12px';
+div.innerHTML=`<div class="q-text" style="font-size:14px">${qi+1}. ${q.q}</div>
+<div class="opts" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
+${[1,2,3,4,5].map(v=>`<div class="opt" style="min-width:48px;text-align:center;font-size:13px" onclick="selectHolland(this,${qi},${v})">${v===1?'很不喜欢':v===2?'不太喜欢':v===3?'一般':v===4?'比较喜欢':'非常喜欢'}</div>`).join('')}
+</div>`;
+c.appendChild(div);
+});
+document.getElementById('hollandProgress').textContent=`共 ${hollandQuestions.length} 项，请逐项选择`;
+}
+function selectHolland(el,qi,val){
+el.parentElement.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+el.classList.add('selected');
+hollandAnswers[qi]=val;
+const answered=Object.keys(hollandAnswers).length;
+document.getElementById('hollandProgress').textContent=`已完成 ${answered}/${hollandQuestions.length}`;
+}
+function calcHolland(){
+const scores={R:0,I:0,A:0,S:0,E:0,C:0};
+const counts={R:0,I:0,A:0,S:0,E:0,C:0};
+hollandQuestions.forEach((q,qi)=>{
+if(hollandAnswers[qi]!==undefined){scores[q.type]+=hollandAnswers[qi];counts[q.type]++;}
+});
+const result={};
+Object.keys(scores).forEach(k=>{result[k]=counts[k]>0?Math.round(scores[k]/counts[k]/5*100):50;});
+return result;
+}
+const hollandTypes={R:'现实型(R)',I:'研究型(I)',A:'艺术型(A)',S:'社会型(S)',E:'企业型(E)',C:'常规型(C)'};
+const hollandDesc={R:'偏好动手操作、使用工具机械，注重实际结果。',I:'偏好观察分析、科学研究，善于逻辑推理。',A:'偏好创造性表达，富有想象力和审美力。',S:'偏好帮助、教导他人，善于沟通协调。',E:'偏好领导、说服他人，追求目标和影响力。',C:'偏好有序、精确的工作，注重细节和规则。'};
+const hollandCareers={
+R:['工程师','技术维修','建筑设计','农业技术','机械制造','飞行员','电工技师'],
+I:['科研学者','数据分析师','医学研究','软件开发','药学','环境科学','心理学研究'],
+A:['设计师','摄影师','作家','广告创意','音乐人','建筑师','影视导演'],
+S:['教师','心理咨询师','人力资源','社会工作','医护','培训师','客户关系管理'],
+E:['市场营销','企业管理','创业者','销售经理','项目经理','公关经理','投资顾问'],
+C:['会计师','审计','行政管理','数据分析','档案管理','银行柜员','质量控制']
+};
+function getCareerRecommendations(holland,mbtiType){
+const sorted=Object.entries(holland).sort((a,b)=>b[1]-a[1]);
+const top3=sorted.slice(0,3).map(s=>s[0]);
+let html='<div style="margin-bottom:16px">';
+html+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">';
+top3.forEach((t,i)=>{
+const pct=holland[t];
+const colors=['#2563eb','#0d9488','#f59e0b'];
+html+=`<span style="background:${colors[i]}15;color:${colors[i]};padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600">${hollandTypes[t]} ${pct}分</span>`;
+});
+html+='</div>';
+html+=`<p style="font-size:14px;color:#475569;margin-bottom:12px"><strong>主导类型：</strong>${hollandTypes[top3[0]]} — ${hollandDesc[top3[0]]}</p>`;
+html+='<div style="background:#f8fafc;border-radius:8px;padding:14px 18px">';
+html+='<p style="font-size:14px;font-weight:600;color:#1e40af;margin-bottom:8px">推荐职业方向：</p>';
+html+='<div style="display:flex;flex-wrap:wrap;gap:6px">';
+const careers=[...new Set([...hollandCareers[top3[0]],...hollandCareers[top3[1]].slice(0,3)])];
+careers.forEach(c=>{html+=`<span style="background:#dbeafe;color:#1e40af;padding:4px 12px;border-radius:12px;font-size:12px">${c}</span>`;});
+html+='</div></div>';
+// MBTI + Holland cross reference
+const mbtiCareerMap={INTJ:['战略咨询','系统架构','科研','金融分析'],INTP:['学术研究','软件开发','数据科学','哲学研究'],ENTJ:['企业高管','创业','投资银行','管理咨询'],ENTP:['创业','产品经理','风险投资','广告策划'],INFJ:['心理咨询','人力资源','非营利组织','写作'],INFP:['心理咨询','艺术创作','教育','社工'],ENFJ:['教育培训','人力资源','公关管理','组织发展'],ENFP:['市场营销','媒体','创业','创意策划'],ISTJ:['财务审计','质量管理','法律','军事'],ISFJ:['医护','教育','社会工作','行政管理'],ESTJ:['项目管理','运营管理','法律','销售管理'],ESFJ:['人力资源','客户关系','医疗护理','教育'],ISTP:['工程师','机械技术','法医学','航空'],ISFP:['设计师','艺术家','护理','园艺'],ESTP:['销售','体育','急诊医学','商务拓展'],ESFP:['演艺','活动策划','销售','旅游']};
+if(mbtiType&&mbtiCareerMap[mbtiType]){
+html+='<div style="margin-top:12px;padding-top:12px;border-top:1px dashed #e2e8f0">';
+html+=`<p style="font-size:13px;color:#64748b"><strong>MBTI+霍兰德交叉参考（${mbtiType}）：</strong>${mbtiCareerMap[mbtiType].join('、')}</p>`;
+html+='</div>';
+}
+html+='</div>';
+return html;
+}
+
 /* ========== DATA PERSISTENCE ========== */
 async function getResults(){
 if(_cloudMode){const r=await cloudGetResults();if(r)return r;}
@@ -1166,12 +1434,38 @@ data.apps=document.getElementById('appList').value||'';
 data.dailySteps=document.getElementById('dailySteps').value||'';
 data.commute=document.getElementById('commute').value||'';
 data.familyAtmosphere=document.getElementById('familyAtmosphere').value||'';
-data.blood='';data.zodiac='';data.chinese='';data.tattoo='';data.faceObs='';data.handObs='';data.generalObs='';
+// 血型：候选人问卷直采（candBlood 下拉）
+data.blood=document.getElementById('candBlood').value||'不确定';
+// 星座/属相：优先出生日期自动推算，其次面试官观察记录
+(()=>{
+const bd=document.getElementById('candBirth').value;
+let z=document.getElementById('obsZodiac')?document.getElementById('obsZodiac').value:'';
+let ch=document.getElementById('obsChinese')?document.getElementById('obsChinese').value:'';
+if(bd){
+const d=new Date(bd),m=d.getMonth()+1,day=d.getDate(),y=d.getFullYear();
+const zodiacDates=[[1,20,'摩羯座'],[2,19,'水瓶座'],[3,21,'双鱼座'],[4,20,'白羊座'],[5,21,'金牛座'],[6,21,'双子座'],[7,22,'巨蟹座'],[8,23,'狮子座'],[9,23,'处女座'],[10,23,'天秤座'],[11,22,'天蝎座'],[12,22,'射手座'],[12,31,'摩羯座']];
+for(const[em,ed,en]of zodiacDates){if(m<em||(m===em&&day<=ed)){z=en;break;}}
+const animals=['猴','鸡','狗','猪','鼠','牛','虎','兔','龙','蛇','马','羊'];
+ch=animals[y%12]||'';
+}
+data.zodiac=z||'';data.chinese=ch||'';
+})();
+data.tattoo='';data.faceObs='';data.handObs='';data.generalObs='';
 const mbti=calcMBTI();data.mbtiType=mbti.type;data.mbtiDesc=mbtiDesc[mbti.type]||'未知类型';data.mbtiDims=mbti.dimScores;
 const exRadio=document.querySelector('input[name="exercise"]:checked');data.exerciseScore=exRadio?parseInt(exRadio.value):50;
 data.exTypes=[];document.querySelectorAll('input[name="exType"]:checked').forEach(c=>data.exTypes.push(c.value));
+data.sleepHabits=[];document.querySelectorAll('input[name="sleep"]:checked').forEach(c=>data.sleepHabits.push(c.value));
+data.dietHabits=[];document.querySelectorAll('input[name="diet"]:checked').forEach(c=>data.dietHabits.push(c.value));
+data.hobbies=[];document.querySelectorAll('input[name="hobby"]:checked').forEach(c=>data.hobbies.push(c.value));
+data.socialHabits=[];document.querySelectorAll('input[name="social"]:checked').forEach(c=>data.socialHabits.push(c.value));
+data.learningHabits=[];document.querySelectorAll('input[name="learning"]:checked').forEach(c=>data.learningHabits.push(c.value));
+data.digSkills=[];document.querySelectorAll('input[name="digSkill"]:checked').forEach(c=>data.digSkills.push(c.value));
+data.emotStress=[];document.querySelectorAll('input[name="emotStress"]:checked').forEach(c=>data.emotStress.push(c.value));
+data.learnInnov=[];document.querySelectorAll('input[name="learnInnov"]:checked').forEach(c=>data.learnInnov.push(c.value));
+data.familyEnv=[];document.querySelectorAll('input[name="familyEnv"]:checked').forEach(c=>data.familyEnv.push(c.value));
+data.lifestyleScore=calcLifestyleScore(data);
 data.colorScore=data.colorScore||50;data.reactionScore=data.reactionScore||50;data.diffScore=data.diffScore||50;
-data.insightScore=data.insightScore||50;
+if(data.insightScore==null)data.insightScore=50;
 const sjtResult=calcSJT();
 data.eqScore=sjtResult.eqScore;data.stressScore=sjtResult.stressScore;
 data.innovScore=sjtResult.innovScore;data.learnScore=sjtResult.learnScore;
@@ -1184,6 +1478,7 @@ if(fcResult.commStyle&&fcResult.commStyle!=='未选择')data.commStyle=fcResult.
 if(fcResult.workPref&&fcResult.workPref!=='未选择')data.workPref=fcResult.workPref;
 if(!data.workPref)data.workPref='未选择';
 if(data.height>0&&data.weight>0){const hm=data.height/100;data.bmi=Math.round(data.weight/(hm*hm)*10)/10;}else data.bmi=0;
+data.hollandScores=calcHolland();
 }
 
 async function submitAssessment(){
@@ -1200,34 +1495,221 @@ const bloodTraits={'A型':{score:72,traits:['严谨细致','责任心强','追�
 const zodiacTraits={'白羊座':{score:70,traits:['勇敢果断','充满活力','开创精神','直率坦诚']},'金牛座':{score:68,traits:['踏实稳重','耐心持久','重视品质','务实可靠']},'双子座':{score:72,traits:['机智灵活','善于沟通','好奇心强','多才多艺']},'巨蟹座':{score:65,traits:['细腻敏感','重视家庭','保护意识强','共情力高']},'狮子座':{score:75,traits:['自信大方','领导力强','表现欲强','慷慨大度']},'处女座':{score:73,traits:['追求完美','分析力强','注重细节','勤勉踏实']},'天秤座':{score:70,traits:['追求和谐','审美力强','善于协调','外交手腕']},'天蝎座':{score:74,traits:['洞察力强','意志坚定','深沉内敛','专注执着']},'射手座':{score:67,traits:['乐观开朗','追求自由','冒险精神','视野开阔']},'摩羯座':{score:76,traits:['目标明确','纪律严明','脚踏实地','野心勃勃']},'水瓶座':{score:73,traits:['独立思考','创新精神','人道主义','不按常理']},'双鱼座':{score:66,traits:['想象力丰富','共情力强','艺术气质','适应性好']}};
 const chineseTraits={'鼠':{score:70,traits:['机智灵活','适应力强','善于交际','观察敏锐']},'牛':{score:72,traits:['勤勉踏实','坚韧不拔','值得信赖','脚踏实地']},'虎':{score:75,traits:['勇敢自信','天生领袖','果断冒险','精力充沛']},'兔':{score:67,traits:['温和优雅','心思细腻','谨慎谦逊','品味高雅']},'龙':{score:78,traits:['精力充沛','才华横溢','志向远大','自信果断']},'蛇':{score:73,traits:['深思熟虑','直觉敏锐','优雅神秘','善于分析']},'马':{score:70,traits:['热情奔放','行动力强','独立自由','口才出众']},'羊':{score:66,traits:['温和善良','创造力强','富有同情心','审美力佳']},'猴':{score:74,traits:['聪明机智','多才多艺','善于解决问题','活泼好动']},'鸡':{score:71,traits:['勤奋精确','善于表达','注重外表','条理分明']},'狗':{score:70,traits:['忠诚正直','正义感强','可靠务实','重情重义']},'猪':{score:68,traits:['真诚善良','乐观豁达','勤奋专注','宽容大度']}};
 
+/* 岗位特质画像：关键词匹配岗位类型，ideal 列出该岗位最看重的特质关键词，desc 为岗位画像说明 */
+const positionProfiles={
+'产品':{'keywords':['产品','pm','product'],'ideal':['领导力强','目标导向','社交活跃','善于沟通','洞察力','创造力强','自信果断','善于协调'],'desc':'需要统筹规划、跨部门沟通和用户洞察'},
+'技术':{'keywords':['开发','工程','技术','前端','后端','全栈','架构','程序员','dev','engineer','研发'],'ideal':['追求完美','分析力强','善于分析','注重细节','独立思考','专注执着','勤勉踏实','解决问题'],'desc':'需要深度思考、逻辑严谨和持续钻研'},
+'设计':{'keywords':['设计','ui','ux','视觉','美工','design'],'ideal':['创造力强','审美力强','独特视角','想象力丰富','好奇心强','艺术气质','多才多艺','品味高雅'],'desc':'需要创意灵感、美学敏感和用户体验思维'},
+'销售':{'keywords':['销售','商务','bd','客户经理','sales'],'ideal':['社交活跃','自信果断','目标导向','热情奔放','口才出众','乐观开朗','善于交际','行动力强'],'desc':'需要开拓精神、人际敏感和目标驱动'},
+'运营':{'keywords':['运营','增长','活动','内容运营','用户运营','operation'],'ideal':['条理分明','善于协调','观察敏锐','勤奋精确','适应力强','灵活变通','脚踏实地','可靠务实'],'desc':'需要执行力、数据敏感和流程优化能力'},
+'人力':{'keywords':['人力','hr','人事','招聘','组织','培训','hrbp'],'ideal':['共情力高','善于协调','正义感强','重情重义','温和善良','细腻敏感','保护意识强','善于沟通'],'desc':'需要同理心、沟通能力和组织敏感度'},
+'财务':{'keywords':['财务','会计','出纳','finance','cfo','审计'],'ideal':['严谨细致','责任心强','追求完美','脚踏实地','条理分明','勤奋精确','可靠务实','专注执着'],'desc':'需要精确性、合规意识和风险控制能力'},
+'市场':{'keywords':['市场','marketing','品牌','公关','pr','营销','传播'],'ideal':['创造力强','善于表达','社交活跃','好奇心强','视野开阔','多才多艺','乐观开朗','审美力强'],'desc':'需要创意策划、品牌敏感和传播思维'},
+'管理':{'keywords':['经理','总监','主管','ceo','负责人','领导','director','manager','总经理'],'ideal':['领导力强','自信果断','目标导向','目标明确','纪律严明','社交活跃','慷慨大度','志向远大'],'desc':'需要战略视野、团队领导和决策魄力'},
+'行政':{'keywords':['行政','助理','秘书','office','admin'],'ideal':['严谨细致','条理分明','善于协调','可靠务实','温和优雅','责任心强','勤奋精确','脚踏实地'],'desc':'需要事务统筹、细节把控和服务意识'}
+};
+function calcPositionMatch(d){
+const bt=bloodTraits[d.blood]||bloodTraits['不确定'];
+const zd=zodiacTraits[d.zodiac]||{score:50,traits:['待观察']};
+const ch=chineseTraits[d.chinese]||{score:50,traits:['待观察']};
+const traitScore=Math.round(bt.score*0.35+zd.score*0.325+ch.score*0.325);
+const pos=(d.position||'').toLowerCase();
+let profile=null;
+for(const k in positionProfiles){const p=positionProfiles[k];if(p.keywords.some(kw=>pos.includes(kw.toLowerCase()))){profile=p;break;}}
+if(!profile)return{score:traitScore,profile:null,btScore:bt.score,zdScore:zd.score,chScore:ch.score};
+const all=[...(bt.traits||[]),...(zd.traits||[]),...(ch.traits||[])];
+let hits=0;profile.ideal.forEach(it=>{if(all.some(t=>t.includes(it)||it.includes(t)))hits++;});
+const matchRatio=hits/Math.max(profile.ideal.length,1);
+const posFit=Math.round(40+matchRatio*60);
+const finalScore=Math.round(traitScore*0.35+posFit*0.65);
+return{score:finalScore,profile,traitScore,posFit,hits,btScore:bt.score,zdScore:zd.score,chScore:ch.score};
+}
+
+/* 岗位胜任力权重表（每个岗位看重哪些维度，权重总和=1） */
+const positionCompetency={
+'产品':{dims:{学习成长力:0.20,创新思维:0.15,情绪管理:0.10,共情感知力:0.15,信息洞察力:0.15,数字素养:0.10,观察注意力:0.10,抗压能力:0.05},mbti:{ENTJ:90,ENFJ:85,ENTP:82,ENFP:80,INTJ:78,INTP:75,ESTJ:76,INFJ:74},holland:{E:90,I:80,S:75,A:70}},
+'技术':{dims:{数字素养:0.25,信息洞察力:0.15,学习成长力:0.20,创新思维:0.15,手脑协调能力:0.10,观察注意力:0.10,抗压能力:0.05},mbti:{INTJ:92,INTP:90,ISTP:88,ISTJ:85,ENTJ:78,ENTP:76},holland:{I:95,R:80,C:70,A:65}},
+'设计':{dims:{创新思维:0.30,共情感知力:0.20,观察注意力:0.15,学习成长力:0.10,数字素养:0.15,信息洞察力:0.10},mbti:{INFP:88,ENFP:86,ISFP:85,INFJ:82,INTP:78,ENFJ:75},holland:{A:95,I:75,S:70,R:60}},
+'销售':{dims:{情绪管理:0.15,抗压能力:0.20,共情感知力:0.15,手脑协调能力:0.05,学习成长力:0.10,创新思维:0.10,信息洞察力:0.15,生活健康度:0.10},mbti:{ESTP:92,ESFP:90,ENTP:88,ENFP:85,ENTJ:82,ESTJ:80},holland:{E:95,S:80,A:65,C:60}},
+'运营':{dims:{信息洞察力:0.15,数字素养:0.15,情绪管理:0.10,学习成长力:0.15,抗压能力:0.10,共情感知力:0.10,观察注意力:0.15,创新思维:0.10},mbti:{ESTJ:88,ISTJ:86,ESFJ:82,ENTJ:80,ISFJ:78,ENFJ:76},holland:{C:85,E:80,S:75,I:70}},
+'人力':{dims:{共情感知力:0.25,情绪管理:0.20,学习成长力:0.10,家庭支持度:0.05,抗压能力:0.10,信息洞察力:0.10,创新思维:0.10,生活健康度:0.10},mbti:{ENFJ:92,ESFJ:90,ENFP:86,INFJ:84,ISFJ:82,INFP:80},holland:{S:95,E:80,A:70,C:65}},
+'财务':{dims:{数字素养:0.20,观察注意力:0.25,信息洞察力:0.20,抗压能力:0.10,情绪管理:0.10,学习成长力:0.10,生活健康度:0.05},mbti:{ISTJ:95,ISFJ:88,INTJ:85,ESTJ:82,ISTP:78,INTP:75},holland:{C:95,I:80,R:70,E:55}},
+'市场':{dims:{创新思维:0.25,共情感知力:0.15,信息洞察力:0.15,学习成长力:0.10,情绪管理:0.10,数字素养:0.10,抗压能力:0.10,生活健康度:0.05},mbti:{ENFP:90,ENTP:88,ENFJ:85,ENTJ:82,ESFP:78,INFJ:76},holland:{E:90,A:85,S:75,I:70}},
+'管理':{dims:{情绪管理:0.15,抗压能力:0.15,学习成长力:0.15,创新思维:0.15,共情感知力:0.10,信息洞察力:0.10,数字素养:0.10,生活健康度:0.10},mbti:{ENTJ:95,ESTJ:90,ENFJ:88,INTJ:85,ENTP:82,ESTP:80},holland:{E:95,S:80,C:70,I:65}},
+'行政':{dims:{观察注意力:0.20,情绪管理:0.15,数字素养:0.15,信息洞察力:0.10,共情感知力:0.10,学习成长力:0.10,生活健康度:0.10,抗压能力:0.10},mbti:{ISTJ:92,ISFJ:90,ESTJ:86,ESFJ:84,INTJ:75,INFJ:72},holland:{C:95,S:75,E:70,R:65}}
+};
+function calcJobMatch(d){
+const dims=calcDimScores(d);
+const allDimVals=Object.values(dims);
+const composite=Math.round(allDimVals.reduce((a,b)=>a+b,0)/allDimVals.length);
+const pm=calcPositionMatch(d);
+const pos=(d.position||'').toLowerCase();
+let profile=null;
+for(const k in positionCompetency){const p=positionCompetency[k];if(positionProfiles[k]&&positionProfiles[k].keywords.some(kw=>pos.includes(kw.toLowerCase()))){profile=p;break;}}
+if(!profile){
+return{composite,jobMatch:pm.score,breakdown:{trait:pm.score,mbti:calcMBTIScore(d.mbtiDims),holland:50,competency:composite},hasProfile:false};
+}
+// 岗位胜任力分：加权求和关键维度
+let compScore=0;
+for(const k in profile.dims){compScore+=(dims[k]||50)*profile.dims[k];}
+compScore=Math.round(compScore);
+// MBTI 性格岗位契合
+let mbtiFit=65;
+if(profile.mbti&&d.mbtiType){
+const direct=profile.mbti[d.mbtiType];
+if(direct!==undefined)mbtiFit=direct;
+else{let best=0;for(const t in profile.mbti){if(profile.mbti[t]>best)best=profile.mbti[t];}mbtiFit=Math.round(best*0.7);}
+}
+// Holland 兴趣契合
+let hollandFit=50;
+if(profile.holland&&d.hollandScores){
+let weighted=0,cnt=0;
+for(const k in profile.holland){weighted+=(d.hollandScores[k]||50)*profile.holland[k];cnt+=profile.holland[k];}
+if(cnt>0)hollandFit=Math.round(weighted/cnt);
+}
+// 个人特质契合（来自血型/星座/属相×岗位）
+const traitFit=pm.score;
+// 融合：胜任力40% + MBTI 15% + Holland 15% + 特质 30%
+const jobMatch=Math.round(compScore*0.40+mbtiFit*0.15+hollandFit*0.15+traitFit*0.30);
+return{composite,jobMatch:Math.max(0,Math.min(100,jobMatch)),breakdown:{competency:compScore,mbti:mbtiFit,holland:hollandFit,trait:traitFit},hasProfile:true};
+}
+
 function calcMBTIScore(dims){if(!dims)return 50;let t=0;Object.values(dims).forEach(d=>{t+=Math.max(d.pct,100-d.pct);});return Math.round(t/4);}
 function calcPhysScore(d){let s=50;if(d.bmi>0){if(d.bmi>=18.5&&d.bmi<24)s=85;else if(d.bmi>=24&&d.bmi<28)s=65;else if(d.bmi<18.5)s=60;else s=45;}return Math.round((s+d.exerciseScore)/2);}
-function calcAppScore(apps){if(!apps)return 40;const a=apps.toLowerCase();let s=40;
-['github','notion','figma','vscode','slack','jira','excel','python'].forEach(p=>{if(a.includes(p))s+=8;});
-['得到','知乎','coursera','kindle','微信读书'].forEach(p=>{if(a.includes(p))s+=6;});
-['抖音','快手','微博','instagram','tiktok'].forEach(p=>{if(a.includes(p))s+=2;});return Math.min(100,s);}
-function calcFamilyScore(d){let s=50;if(d.familyType==='open')s=85;else if(d.familyType==='demo')s=75;else if(d.familyType==='strict')s=55;else if(d.familyType==='free')s=60;return Math.min(100,Math.max(0,s));}
+function calcAppScore(d){
+let direct=40;
+if(d.digSkills&&d.digSkills.length){
+const pts={'办公':10,'协作':10,'数据':14,'编程':16,'设计':12,'AI':12,'基础':-10};
+d.digSkills.forEach(s=>{direct+=pts[s]||0;});
+direct=Math.min(100,Math.max(20,direct));
+}
+const appText=d.apps||'';const a=appText.toLowerCase();let appBonus=0;
+['github','notion','figma','vscode','slack','jira','excel','python'].forEach(p=>{if(a.includes(p))appBonus+=3;});
+['得到','知乎','coursera','kindle','微信读书'].forEach(p=>{if(a.includes(p))appBonus+=2;});
+const indirect=Math.min(100,40+appBonus);
+return Math.round(d.digSkills&&d.digSkills.length?(direct*0.7+indirect*0.3):indirect);
+}
+function calcFamilyScore(d){
+const indirect=(d.familyType==='open')?85:(d.familyType==='demo')?75:(d.familyType==='strict')?55:(d.familyType==='free')?60:50;
+let direct=50;
+if(d.familyEnv&&d.familyEnv.length){
+const pts={'支持':12,'鼓励':12,'独立':10,'经济ok':8,'压力':-6,'负担':-8};
+d.familyEnv.forEach(s=>{direct+=pts[s]||0;});
+direct=Math.min(100,Math.max(20,direct));
+return Math.round(direct*0.6+indirect*0.4);
+}
+return indirect;
+}
+function calcEmotScore(d){
+if(!d.emotStress||!d.emotStress.length)return 50;
+let s=50;
+const pts={'觉察':12,'调节':12,'冷静':10,'高压ok':8,'易焦虑':-10,'回避':-6,'影响':-8};
+d.emotStress.forEach(v=>{s+=pts[v]||0;});
+return Math.min(100,Math.max(20,s));
+}
+function calcStressDirect(d){
+if(!d.emotStress||!d.emotStress.length)return 50;
+let s=50;
+const pts={'冷静':12,'高压ok':14,'调节':8,'觉察':6,'易焦虑':-8,'回避':-10,'影响':-10};
+d.emotStress.forEach(v=>{s+=pts[v]||0;});
+return Math.min(100,Math.max(20,s));
+}
+function calcLearnDirect(d){
+if(!d.learnInnov||!d.learnInnov.length)return 50;
+let s=50;
+const pts={'主动学':14,'复盘':12,'跨界':10,'新点子':8,'改进':10,'质疑':8,'求稳':-4};
+d.learnInnov.forEach(v=>{s+=pts[v]||0;});
+return Math.min(100,Math.max(20,s));
+}
+function calcInnovDirect(d){
+if(!d.learnInnov||!d.learnInnov.length)return 50;
+let s=50;
+const pts={'新点子':14,'质疑':12,'改进':12,'跨界':10,'主动学':6,'复盘':8,'求稳':-6};
+d.learnInnov.forEach(v=>{s+=pts[v]||0;});
+return Math.min(100,Math.max(20,s));
+}
+function calcLifestyleScore(d){
+let s=50;
+// Sleep scoring
+if(d.sleepHabits&&d.sleepHabits.length){
+if(d.sleepHabits.includes('早睡'))s+=8;if(d.sleepHabits.includes('充足'))s+=8;if(d.sleepHabits.includes('午休'))s+=4;
+if(d.sleepHabits.includes('晚睡'))s-=6;if(d.sleepHabits.includes('不足'))s-=8;
+}
+// Diet scoring
+if(d.dietHabits&&d.dietHabits.length){
+if(d.dietHabits.includes('规律'))s+=6;if(d.dietHabits.includes('健康'))s+=6;if(d.dietHabits.includes('自己做'))s+=4;if(d.dietHabits.includes('控制'))s+=4;
+if(d.dietHabits.includes('外卖'))s-=2;if(d.dietHabits.includes('不吃早餐'))s-=6;
+}
+// Hobby richness
+if(d.hobbies&&d.hobbies.length){s+=Math.min(d.hobbies.length*3,12);}
+// Social scoring
+if(d.socialHabits&&d.socialHabits.length){
+if(d.socialHabits.includes('志愿'))s+=6;if(d.socialHabits.includes('线下活跃'))s+=3;if(d.socialHabits.includes('小圈子'))s+=2;
+}
+// Learning scoring
+if(d.learningHabits&&d.learningHabits.length){
+if(d.learningHabits.includes('每天学'))s+=8;if(d.learningHabits.includes('读书'))s+=5;if(d.learningHabits.includes('课程'))s+=5;if(d.learningHabits.includes('考证'))s+=6;if(d.learningHabits.includes('分享'))s+=4;
+if(d.learningHabits.includes('不学习'))s-=8;
+}
+return Math.min(100,Math.max(20,s));
+}
 function calcDimScores(d){
 const bt=bloodTraits[d.blood]||bloodTraits['不确定'];
 const zd=zodiacTraits[d.zodiac]||{score:50,traits:['待观察']};
 const ch=chineseTraits[d.chinese]||{score:50,traits:['待观察']};
-return{'性格匹配度':calcMBTIScore(d.mbtiDims),'血型特质':bt.score,'星座特质':zd.score,'属相特质':ch.score,'身体素质':calcPhysScore(d),'数字素养':calcAppScore(d.apps),'共情感知力':d.colorScore,'手脑协调能力':d.reactionScore,'观察注意力':d.diffScore,'信息洞察力':d.insightScore||50,'家庭支持度':calcFamilyScore(d),'情绪管理':d.eqScore,'抗压能力':d.stressScore,'学习成长力':d.learnScore,'创新思维':d.innovScore};
+const posMatch=calcPositionMatch(d);
+// Blend direct self-assessment with indirect test scores (60% direct + 40% indirect)
+const emotDirect=calcEmotScore(d);
+const stressDirect=calcStressDirect(d);
+const learnDirect=calcLearnDirect(d);
+const innovDirect=calcInnovDirect(d);
+const eqBlended=Math.round((d.emotStress&&d.emotStress.length)?(emotDirect*0.6+d.eqScore*0.4):d.eqScore);
+const stressBlended=Math.round((d.emotStress&&d.emotStress.length)?(stressDirect*0.6+d.stressScore*0.4):d.stressScore);
+const learnBlended=Math.round((d.learnInnov&&d.learnInnov.length)?(learnDirect*0.6+d.learnScore*0.4):d.learnScore);
+const innovBlended=Math.round((d.learnInnov&&d.learnInnov.length)?(innovDirect*0.6+d.innovScore*0.4):d.innovScore);
+return{'性格匹配度':calcMBTIScore(d.mbtiDims),'岗位匹配度':posMatch.score,'身体素质':calcPhysScore(d),'生活健康度':d.lifestyleScore??50,'数字素养':calcAppScore(d),'共情感知力':d.colorScore,'手脑协调能力':d.reactionScore,'观察注意力':d.diffScore,'信息洞察力':d.insightScore??50,'家庭支持度':calcFamilyScore(d),'情绪管理':eqBlended,'抗压能力':stressBlended,'学习成长力':learnBlended,'创新思维':innovBlended};
 }
 
 /* ========== RADAR CHART ========== */
 function generateRadar(dimensions,scores){
-const n=dimensions.length,cx=200,cy=200,r=150;
+const n=dimensions.length,cx=330,cy=330,r=170;
 const angles=dimensions.map((_,i)=>(Math.PI*2*i/n)-Math.PI/2);
 function p2c(angle,radius){return{x:cx+radius*Math.cos(angle),y:cy+radius*Math.sin(angle)};}
-let svg=`<svg viewBox="0 0 400 400" width="400" height="400" xmlns="http://www.w3.org/2000/svg">`;
+let svg=`<svg viewBox="0 0 660 660" width="660" height="660" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;height:auto;display:block;margin:0 auto">`;
+// 背景网格
 [0.2,0.4,0.6,0.8,1].forEach(p=>{const pts=angles.map(a=>{const pt=p2c(a,r*p);return`${pt.x},${pt.y}`;}).join(' ');svg+=`<polygon points="${pts}" fill="none" stroke="#e2e8f0" stroke-width="1"/>`;});
 angles.forEach(a=>{const p=p2c(a,r);svg+=`<line x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}" stroke="#e2e8f0" stroke-width="1"/>`;});
+// 数据多边形
 const dataPts=scores.map((s,i)=>{const p=p2c(angles[i],r*s/100);return`${p.x},${p.y}`;}).join(' ');
 svg+=`<polygon points="${dataPts}" fill="rgba(37,99,235,0.15)" stroke="#2563eb" stroke-width="2"/>`;
 scores.forEach((s,i)=>{const p=p2c(angles[i],r*s/100);svg+=`<circle cx="${p.x}" cy="${p.y}" r="4" fill="#2563eb"/>`;});
-dimensions.forEach((dim,i)=>{const p=p2c(angles[i],r+25);const anchor=p.x<cx-10?'end':p.x>cx+10?'start':'middle';
-svg+=`<text x="${p.x}" y="${p.y}" text-anchor="${anchor}" dominant-baseline="middle" font-size="11" fill="#475569">${dim}</text>`;
-const sp=p2c(angles[i],r+12);svg+=`<text x="${sp.x}" y="${sp.y+14}" text-anchor="${anchor}" font-size="10" fill="#2563eb" font-weight="600">${scores[i]}</text>`;});
+// 标签 + 分数（按角度自适应锚点与基线，避免遮挡）
+dimensions.forEach((dim,i)=>{
+const a=angles[i];
+const cosA=Math.cos(a),sinA=Math.sin(a);
+// 水平锚点：按 x 坐标相对中心判定
+const lp=p2c(a,r+46);
+let anchor='middle';
+if(lp.x<cx-25)anchor='end';
+else if(lp.x>cx+25)anchor='start';
+// 垂直基线：顶部标签用 hanging（文字向下展开），底部标签用 auto（文字向上展开），左右居中 middle
+let baseline='middle';
+let yOff=0;
+if(lp.y<cy-r*0.5){baseline='hanging';yOff=2;}
+else if(lp.y>cy+r*0.5){baseline='auto';yOff=-2;}
+// 维度名（外侧）
+svg+=`<text x="${lp.x}" y="${lp.y+yOff}" text-anchor="${anchor}" dominant-baseline="${baseline}" font-size="12" font-weight="600" fill="#334155">${dim}</text>`;
+// 分数（贴着数据点外侧，不与维度名重叠）
+const sp=p2c(a,r+22);
+let sAnchor='middle';
+if(sp.x<cx-20)sAnchor='end';
+else if(sp.x>cx+20)sAnchor='start';
+let sBaseline='middle';
+let sYOff=0;
+if(sp.y<cy-r*0.5){sBaseline='hanging';sYOff=2;}
+else if(sp.y>cy+r*0.5){sBaseline='auto';sYOff=-2;}
+svg+=`<text x="${sp.x}" y="${sp.y+sYOff}" text-anchor="${sAnchor}" dominant-baseline="${sBaseline}" font-size="11" fill="#2563eb" font-weight="700">${scores[i]}</text>`;
+});
 svg+=`</svg>`;return svg;
 }
 
@@ -1262,6 +1744,18 @@ h+=`<p><strong>【团队适配】</strong>基于${d.mbtiType}性格类型和${d.
 if(d.workPref==='协作')h+='该候选人偏好团队协作，适合融入现有团队。';
 else if(d.workPref==='独立')h+='该候选人偏好独立工作，适合需要高度自主性的岗位。';
 else h+='该候选人能灵活适应不同工作模式。';
+h+=`</p>`;
+const pm=calcPositionMatch(d);
+h+=`<p><strong>【岗位适配】</strong>`;
+if(pm.profile){
+h+=`该候选人应聘 <strong>${d.position}</strong> 岗位，岗位匹配度评分 <strong>${pm.score}分</strong>。`;
+if(pm.score>=75)h+='个人特质与岗位画像高度契合，建议重点关注。';
+else if(pm.score>=60)h+='个人特质与岗位画像匹配良好，具备较好的胜任基础。';
+else if(pm.score>=45)h+='个人特质与岗位画像有一定契合度，部分能力可通过培养补足。';
+else h+='个人特质与岗位画像匹配度偏低，建议结合实际测评维度综合判断。';
+}else{
+h+=`该候选人应聘 <strong>${d.position}</strong> 岗位，综合个人特质评分 <strong>${pm.score}分</strong>（基于血型/星座/属相）。`;
+}
 h+=`</p></div>`;return h;}
 
 function generateSuggestions(dims){
@@ -1300,31 +1794,164 @@ const bt=bloodTraits[d.blood]||bloodTraits['不确定'];
 const zd=zodiacTraits[d.zodiac]||{score:50,traits:['待观察']};
 const ch=chineseTraits[d.chinese]||{score:50,traits:['待观察']};
 let h='';
-h+=`<div class="summary-box"><h3>📊 测评总览</h3><div class="summary-grid">
-<div class="summary-item"><div class="label">综合评分</div><div class="value" style="color:${avg>=70?'#22c55e':avg>=50?'#f59e0b':'#ef4444'}">${avg}/100</div></div>
-<div class="summary-item"><div class="label">MBTI类型</div><div class="value">${d.mbtiType}</div><div style="font-size:12px;color:var(--text-light)">${d.mbtiDesc}</div></div>
-<div class="summary-item"><div class="label">应聘岗位</div><div class="value" style="font-size:15px">${d.position}</div></div>
-<div class="summary-item"><div class="label">测评日期</div><div class="value" style="font-size:15px">${d.date||new Date().toLocaleDateString('zh-CN')}</div></div>
-</div></div>`;
-h+=`<div class="card"><h2>🎯 15维度雷达图</h2><div class="radar-wrap">${generateRadar(dimNames,dimValues)}</div></div>`;
+// 分值参考色带：5 档区间 + 当前分定位
+const scoreBand=(score,mode)=>{
+const isMatch=mode==='match';
+const bands=isMatch
+?[{min:85,max:100,label:'高度契合',c:'#16a34a',desc:'四维度均与岗位高度契合'},
+{min:70,max:84,label:'匹配良好',c:'#22c55e',desc:'具备岗位胜任基础'},
+{min:55,max:69,label:'部分契合',c:'#f59e0b',desc:'建议结合面试综合判断'},
+{min:40,max:54,label:'匹配度较低',c:'#f97316',desc:'部分能力可通过培养补足'},
+{min:0,max:39,label:'匹配度很低',c:'#ef4444',desc:'建议评估更契合的岗位方向'}]
+:[{min:85,max:100,label:'优秀',c:'#16a34a',desc:'综合素质突出'},
+{min:70,max:84,label:'良好',c:'#22c55e',desc:'综合素质扎实'},
+{min:55,max:69,label:'中等',c:'#f59e0b',desc:'基础较好，仍有提升空间'},
+{min:40,max:54,label:'待提升',c:'#f97316',desc:'建议关注薄弱维度'},
+{min:0,max:39,label:'需关注',c:'#ef4444',desc:'建议制定系统提升计划'}];
+const cur=bands.find(b=>score>=b.min&&score<=b.max)||bands[bands.length-1];
+const pos=Math.min(100,Math.max(0,score));
+let html=`<div style="margin-top:16px;padding:14px 16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;max-width:520px;margin-left:auto;margin-right:auto">`;
+html+=`<div style="font-size:12px;color:#475569;font-weight:600;margin-bottom:8px;text-align:center">📏 分值参考（${isMatch?'岗位匹配度':'综合评分'}）</div>`;
+html+=`<div style="position:relative;height:14px;border-radius:7px;overflow:hidden;display:flex;margin-bottom:6px">`;
+bands.forEach((b,i)=>{
+const w=(i===0?16:b.max-b.min+1);
+html+=`<div style="flex:${w};background:${b.c};${i===0?'':''}"></div>`;
+});
+html+=`</div>`;
+html+=`<div style="position:relative;height:8px;margin-bottom:6px"><div style="position:absolute;left:${pos}%;transform:translateX(-50%);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:7px solid #1e293b"></div></div>`;
+html+=`<div style="display:flex;justify-content:space-between;font-size:11px;color:#64748b">`;
+bands.forEach(b=>{html+=`<span style="text-align:center;flex:1">${b.min}${b.min!==b.max?'-'+b.max:''}</span>`;});
+html+=`</div>`;
+html+=`<div style="margin-top:10px;text-align:center;font-size:12px;color:#334155"><strong style="color:${cur.c}">● 您当前处于「${cur.label}」区间</strong>：<span style="color:#475569">${cur.desc}</span></div>`;
+html+=`</div>`;
+return html;
+};
+(()=>{
+const jm=calcJobMatch(d);
+const compColor=jm.composite>=75?'#22c55e':jm.composite>=60?'#65a30d':jm.composite>=45?'#f59e0b':'#ef4444';
+const matchColor=jm.jobMatch>=75?'#16a34a':jm.jobMatch>=60?'#22c55e':jm.jobMatch>=45?'#f59e0b':'#ef4444';
+const compLevel=jm.composite>=75?'优秀':jm.composite>=60?'良好':jm.composite>=45?'中等':'待提升';
+const matchLevel=jm.jobMatch>=75?'高度契合':jm.jobMatch>=60?'匹配良好':jm.jobMatch>=45?'部分契合':'匹配度较低';
+if(forManager){
+h+=`<div class="summary-box" style="padding:20px"><h3 style="text-align:center;margin-bottom:18px">🎯 双结果总览</h3>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px">
+<div style="background:linear-gradient(135deg,#dbeafe 0%,#bfdbfe 100%);border-radius:14px;padding:22px 18px;text-align:center;border:2px solid #93c5fd">
+<div style="font-size:13px;color:#1e40af;font-weight:600;letter-spacing:1px">📊 个人综合评分</div>
+<div style="font-size:44px;font-weight:800;color:${compColor};margin:8px 0;line-height:1">${jm.composite}</div>
+<div style="font-size:12px;color:#475569">/ 100 · ${compLevel}</div>
+<div style="font-size:11px;color:#64748b;margin-top:8px">14维度综合平均</div>
+</div>
+<div style="background:linear-gradient(135deg,#ffe4e6 0%,#fecdd3 100%);border-radius:14px;padding:22px 18px;text-align:center;border:2px solid #fda4af">
+<div style="font-size:13px;color:#9f1239;font-weight:600;letter-spacing:1px">🎯 岗位匹配度</div>
+<div style="font-size:44px;font-weight:800;color:${matchColor};margin:8px 0;line-height:1">${jm.jobMatch}<span style="font-size:20px;color:#be123c">%</span></div>
+<div style="font-size:12px;color:#475569">匹配 ${d.position||'当前岗位'} · ${matchLevel}</div>
+<div style="font-size:11px;color:#64748b;margin-top:8px">胜任力×MBTI×Holland×特质</div>
+</div>
+</div>
+${scoreBand(jm.composite,'composite')}
+${scoreBand(jm.jobMatch,'match')}
+<div class="summary-grid" style="grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px">
+<div class="summary-item" style="padding:8px 10px"><div class="label" style="font-size:11px">MBTI</div><div class="value" style="font-size:14px">${d.mbtiType}</div></div>
+<div class="summary-item" style="padding:8px 10px"><div class="label" style="font-size:11px">应聘岗位</div><div class="value" style="font-size:14px">${d.position}</div></div>
+<div class="summary-item" style="padding:8px 10px"><div class="label" style="font-size:11px">测评日期</div><div class="value" style="font-size:14px">${d.date||new Date().toLocaleDateString('zh-CN')}</div></div>
+</div>
+</div>`;
+}else{
+h+=`<div class="summary-box" style="padding:20px"><h3 style="text-align:center;margin-bottom:18px">📊 测评总览</h3>
+<div style="display:flex;justify-content:center;margin-bottom:18px">
+<div style="background:linear-gradient(135deg,#dbeafe 0%,#bfdbfe 100%);border-radius:14px;padding:26px 28px;text-align:center;border:2px solid #93c5fd;min-width:260px">
+<div style="font-size:13px;color:#1e40af;font-weight:600;letter-spacing:1px">📊 个人综合评分</div>
+<div style="font-size:52px;font-weight:800;color:${compColor};margin:10px 0;line-height:1">${jm.composite}</div>
+<div style="font-size:13px;color:#475569">/ 100 · ${compLevel}</div>
+<div style="font-size:11px;color:#64748b;margin-top:8px">14维度综合平均</div>
+</div>
+</div>
+${scoreBand(jm.composite,'composite')}
+<div class="summary-grid" style="grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px">
+<div class="summary-item" style="padding:8px 10px"><div class="label" style="font-size:11px">MBTI</div><div class="value" style="font-size:14px">${d.mbtiType}</div></div>
+<div class="summary-item" style="padding:8px 10px"><div class="label" style="font-size:11px">应聘岗位</div><div class="value" style="font-size:14px">${d.position}</div></div>
+<div class="summary-item" style="padding:8px 10px"><div class="label" style="font-size:11px">测评日期</div><div class="value" style="font-size:14px">${d.date||new Date().toLocaleDateString('zh-CN')}</div></div>
+</div>
+</div>`;
+}
+})();
+h+=`<div class="card"><h2>🎯 14维度雷达图</h2><div class="radar-wrap">${generateRadar(dimNames,dimValues)}</div></div>`;
+// 双结果详细解读
+(()=>{
+const jm=calcJobMatch(d);
+const compLvl=jm.composite>=75?'综合素质优秀，各维度表现均衡突出':jm.composite>=60?'综合素质良好，具备较扎实的基础':jm.composite>=45?'综合素质中等，部分维度仍有提升空间':'综合素质有待提升，建议关注薄弱维度';
+h+=`<div class="card" style="background:linear-gradient(135deg,#f0f9ff 0%,#fce7f3 100%);border:2px solid #a5b4fc"><h2 style="color:#4338ca">📊 ${forManager?'双结果详细解读':'综合评分解读'}</h2>`;
+// 个人综合评分
+h+=`<div style="background:#fff;border-radius:10px;padding:16px;${forManager?'margin-bottom:14px':''};border-left:4px solid #2563eb">`;
+h+=`<h3 style="color:#1e40af;margin-bottom:8px">${forManager?'① 个人综合评分':'个人综合评分'}：<span style="font-size:22px;color:#2563eb">${jm.composite}</span>/100</h3>`;
+h+=`<p style="line-height:1.8">${compLvl}。该分数基于 14 个维度的等权平均，涵盖性格、身体素质、生活方式、数字素养、共情/观察/反应/洞察、家庭、情绪、抗压、学习、创新、个人特质与岗位关联等。反映候选人的整体发展水平，<strong>不针对具体岗位</strong>，适合作为个人成长与人才盘点的参考基线。</p>`;
+h+=`</div>`;
+if(forManager){
+// 岗位匹配度（仅管理端可见）
+h+=`<div style="background:#fff;border-radius:10px;padding:16px;border-left:4px solid #f43f5e">`;
+h+=`<h3 style="color:#9f1239;margin-bottom:8px">② 岗位匹配度：<span style="font-size:22px;color:#f43f5e">${jm.jobMatch}%</span> <span style="font-size:13px;color:#64748b;font-weight:normal">匹配 ${d.position||'当前岗位'}</span></h3>`;
+if(jm.hasProfile){
+h+=`<p style="line-height:1.8;margin-bottom:10px">该分数专门针对 <strong>${d.position}</strong> 岗位计算，由四部分融合而成：</p>`;
+h+=`<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px">
+<div style="background:#fef3c7;padding:10px;border-radius:8px"><strong style="color:#92400e">🎯 关键胜任力 (40%)</strong><div style="font-size:20px;font-weight:700;color:#b45309;margin-top:4px">${jm.breakdown.competency}分</div><div style="font-size:11px;color:#78350f;margin-top:2px">岗位重点维度的加权得分</div></div>
+<div style="background:#e0e7ff;padding:10px;border-radius:8px"><strong style="color:#3730a3">🧠 MBTI×岗位 (15%)</strong><div style="font-size:20px;font-weight:700;color:#4338ca;margin-top:4px">${jm.breakdown.mbti}分</div><div style="font-size:11px;color:#3730a3;margin-top:2px">${d.mbtiType} 性格对该岗位的契合度</div></div>
+<div style="background:#dcfce7;padding:10px;border-radius:8px"><strong style="color:#166534">🧭 Holland×岗位 (15%)</strong><div style="font-size:20px;font-weight:700;color:#15803d;margin-top:4px">${jm.breakdown.holland}分</div><div style="font-size:11px;color:#14532d;margin-top:2px">职业兴趣与该岗位的契合度</div></div>
+<div style="background:#fce7f3;padding:10px;border-radius:8px"><strong style="color:#9f1239">🩸 个人特质×岗位 (30%)</strong><div style="font-size:20px;font-weight:700;color:#be123c;margin-top:4px">${jm.breakdown.trait}分</div><div style="font-size:11px;color:#881337;margin-top:2px">血型/星座/属相与该岗位理想特质的契合</div></div>
+</div>`;
+const matchDesc=jm.jobMatch>=75?'综合来看，候选人在胜任力、性格、兴趣、个人特质四个维度上都与岗位高度契合，是强匹配人选。':jm.jobMatch>=60?'候选人与岗位匹配良好，具备胜任基础，可重点关注。':jm.jobMatch>=45?'候选人与岗位有一定契合度，建议结合实际面试表现综合判断。':'匹配度偏低，建议谨慎评估或考虑更适合的岗位方向。';
+h+=`<p style="font-size:13px;color:#475569;line-height:1.7"><strong>结论：</strong>${matchDesc}</p>`;
+}else{
+h+=`<p style="line-height:1.8">该岗位暂未建立专属胜任力模型，当前分数主要基于血型/星座/属相的综合个人特质评估。如需要更精准的岗位匹配分析，可联系管理员补充该岗位的胜任力画像。</p>`;
+}
+h+=`</div>`;
+}
+h+=`</div>`;
+})();
 h+=`<div class="card"><h2>📋 各维度详细分析</h2>`;
 // MBTI
 h+=`<div class="dimension-card" style="border-color:#2563eb"><h3>🧠 MBTI性格类型：<span class="tag tag-blue">${d.mbtiType} - ${d.mbtiDesc}</span></h3><p>`;
 Object.entries(d.mbtiDims).forEach(([name,dd])=>{const dom=dd.ls>=dd.rs?dd.l:dd.r;const pct=dd.ls>=dd.rs?dd.pct:100-dd.pct;h+=`${name}维度：${dd.l}(${dd.ls}题) vs ${dd.r}(${dd.rs}题)，倾向 <strong>${dom}</strong>（${pct}%）<br>`;});
 h+=`</p><p style="margin-top:8px"><strong>类型特征：</strong>${getMBTIDetail(d.mbtiType)}</p><div class="score-bar"><div class="score-fill" style="width:${dims['性格匹配度']}%;background:linear-gradient(90deg,#2563eb,#0d9488)"></div></div></div>`;
-// Blood
-h+=`<div class="dimension-card" style="border-color:#ef4444"><h3>🩸 血型特质：${d.blood}</h3><p><strong>关联特质：</strong>${bt.traits.map(t=>`<span class="tag tag-red">${t}</span>`).join('')}</p>${bt.work?`<p style="margin-top:6px"><strong>工作倾向：</strong>${bt.work}</p>`:''}<div class="score-bar"><div class="score-fill" style="width:${bt.score}%;background:#ef4444"></div></div></div>`;
-// Zodiac
-if(d.zodiac)h+=`<div class="dimension-card" style="border-color:#8b5cf6"><h3>⭐ 星座特质：${d.zodiac}</h3><p><strong>关联特质：</strong>${zd.traits.map(t=>`<span class="tag tag-purple">${t}</span>`).join('')}</p><div class="score-bar"><div class="score-fill" style="width:${zd.score}%;background:#8b5cf6"></div></div></div>`;
-// Chinese
-if(d.chinese)h+=`<div class="dimension-card" style="border-color:#f59e0b"><h3>🐲 属相特质：${d.chinese}</h3><p><strong>关联特质：</strong>${ch.traits.map(t=>`<span class="tag tag-yellow">${t}</span>`).join('')}</p><div class="score-bar"><div class="score-fill" style="width:${ch.score}%;background:#f59e0b"></div></div></div>`;
+// Position match (仅管理端可见：岗位匹配度属于用人决策信息，不向候选人展示)
+if(forManager){(()=>{const pm=calcPositionMatch(d);const all=[...(bt.traits||[]),...(zd.traits||[]),...(ch.traits||[])];const matched=pm.profile?pm.profile.ideal.filter(it=>all.some(t=>t.includes(it)||it.includes(t))):[];
+h+=`<div class="dimension-card" style="border-color:#f43f5e;background:linear-gradient(135deg,#fff1f2 0%,#ffe4e6 100%)"><h3>🎯 岗位匹配度：<span style="color:#f43f5e">${pm.score}分</span></h3>`;
+if(pm.profile){
+h+=`<p><strong>应聘岗位：</strong>${d.position} <span style="color:var(--text-light);font-size:12px">（画像：${pm.profile.desc}）</span></p>`;
+h+=`<p style="margin-top:6px"><strong>🩸 血型特质评分：</strong>${pm.btScore}分 · <strong>⭐ 星座特质评分：</strong>${pm.zdScore}分 · <strong>🐲 属相特质评分：</strong>${pm.chScore}分</p>`;
+h+=`<p style="margin-top:6px"><strong>综合个人特质：</strong>${pm.traitScore}分（血型×35% + 星座×32.5% + 属相×32.5%）</p>`;
+h+=`<p style="margin-top:6px"><strong>岗位契合度：</strong>${pm.posFit}分（命中 ${matched.length}/${pm.profile.ideal.length} 项理想特质）</p>`;
+if(matched.length>0)h+=`<p style="margin-top:6px"><strong>✅ 命中特质：</strong>${matched.map(t=>`<span class="tag tag-green">${t}</span>`).join('')}</p>`;
+const missed=pm.profile.ideal.filter(it=>!all.some(t=>t.includes(it)||it.includes(t)));
+if(missed.length>0)h+=`<p style="margin-top:4px"><strong>⚠️ 可培养：</strong>${missed.slice(0,4).map(t=>`<span class="tag" style="background:#fee2e2;color:#991b1b">${t}</span>`).join('')}</p>`;
+h+=`<p style="margin-top:8px;font-size:12px;color:var(--text-light)">* 岗位匹配度 = 个人特质（35%） + 岗位契合度（65%），综合血型/星座/属相特质与岗位画像计算得出</p>`;
+}else{
+h+=`<p><strong>应聘岗位：</strong>${d.position}</p>`;
+h+=`<p style="margin-top:6px"><strong>🩸 血型特质：</strong>${pm.btScore}分 · <strong>⭐ 星座特质：</strong>${pm.zdScore}分 · <strong>🐲 属相特质：</strong>${pm.chScore}分</p>`;
+h+=`<p style="margin-top:6px"><strong>综合个人特质评分：</strong>${pm.score}分</p>`;
+h+=`<p style="margin-top:6px;font-size:12px;color:var(--text-light)">* 当前岗位暂无专属画像，采用综合个人特质评分</p>`;
+}
+h+=`<div class="score-bar"><div class="score-fill" style="width:${pm.score}%;background:linear-gradient(90deg,#f43f5e,#ec4899)"></div></div></div>`;
+})();}
+// Blood（血型：候选人问卷直采 + 面试官可覆盖）
+h+=`<div class="dimension-card" style="border-color:#ef4444"><h3>🩸 血型特质：${d.blood||'未采集'}</h3>`;
+if(!d.blood||d.blood==='不确定'){
+h+=`<p style="color:#64748b;line-height:1.8">血型属于候选人基本信息中的<strong>选填项</strong>，本次测评未录入，评分按默认值 50 分计入。下次测评时可在「基本信息」步骤选择血型，评分将自动刷新；管理端也可在「面试官观察记录」中补录。</p>`;
+}else{
+h+=`<p><strong>关联特质：</strong>${bt.traits.map(t=>`<span class="tag tag-red">${t}</span>`).join('')}</p>${bt.work?`<p style="margin-top:6px"><strong>工作倾向：</strong>${bt.work}</p>`:''}`;
+h+=`<p style="margin-top:6px;font-size:12px;color:var(--text-light)">* 血型由候选人在「基本信息」步骤自报（面试官可在观察记录中覆盖）</p>`;
+}
+h+=`<div class="score-bar"><div class="score-fill" style="width:${bt.score}%;background:#ef4444"></div></div></div>`;
+// Zodiac（星座：候选人填写出生日期后自动计算）
+if(d.zodiac)h+=`<div class="dimension-card" style="border-color:#8b5cf6"><h3>⭐ 星座特质：${d.zodiac}</h3><p><strong>关联特质：</strong>${zd.traits.map(t=>`<span class="tag tag-purple">${t}</span>`).join('')}</p><p style="margin-top:6px;font-size:12px;color:var(--text-light)">* 根据候选人填写的出生日期自动推算</p><div class="score-bar"><div class="score-fill" style="width:${zd.score}%;background:#8b5cf6"></div></div></div>`;
+// Chinese（属相：候选人填写出生日期后自动计算）
+if(d.chinese)h+=`<div class="dimension-card" style="border-color:#f59e0b"><h3>🐲 属相特质：${d.chinese}</h3><p><strong>关联特质：</strong>${ch.traits.map(t=>`<span class="tag tag-yellow">${t}</span>`).join('')}</p><p style="margin-top:6px;font-size:12px;color:var(--text-light)">* 根据候选人填写的出生年份自动推算</p><div class="score-bar"><div class="score-fill" style="width:${ch.score}%;background:#f59e0b"></div></div></div>`;
 // Physical
 h+=`<div class="dimension-card" style="border-color:#22c55e"><h3>💪 身体素质</h3><p>身高：${d.height}cm | 体重：${d.weight}kg | BMI：${d.bmi} ${d.bmi>0?(d.bmi<18.5?'（偏瘦）':d.bmi<24?'（正常）':d.bmi<28?'（偏重）':'（肥胖）'):''}</p><p>运动频率得分：${d.exerciseScore}/100 | 运动类型：${d.exTypes.length?d.exTypes.join('、'):'未填写'}</p>${d.dailySteps?`<p>每日步数：${d.dailySteps}${d.commute?' | 通勤方式：'+d.commute:''}</p>`:''}<p style="font-size:12px;color:var(--text-light);margin-top:4px">* 运动量和通勤方式为补充参考项，不计入评分</p><div class="score-bar"><div class="score-fill" style="width:${dims['身体素质']}%;background:#22c55e"></div></div></div>`;
 // Apps
 h+=`<div class="dimension-card" style="border-color:#0d9488"><h3>📱 数字素养与APP使用</h3><p><strong>常用APP：</strong>${d.apps||'未填写'}</p><p><strong>分析：</strong>${analyzeApps(d.apps)}</p><p style="font-size:12px;color:var(--text-light);margin-top:4px">* 常用APP为补充参考项，不计入评分</p><div class="score-bar"><div class="score-fill" style="width:${dims['数字素养']}%;background:#0d9488"></div></div></div>`;
 // Games
 h+=`<div class="dimension-card" style="border-color:#ec4899"><h3>🎨 共情感知力</h3><p>色彩情绪感知测试得分 <strong>${d.colorScore}/100</strong>。${d.colorScore>=70?'展现出较强的色彩情绪感知能力，能敏锐捕捉色彩传递的情感信息。':d.colorScore>=50?'具备基本的情绪感知能力，能识别部分色彩情绪线索。':'情绪感知力有较大提升空间，建议多关注环境中的情绪信号。'}</p><div class="score-bar"><div class="score-fill" style="width:${d.colorScore}%;background:#ec4899"></div></div></div>`;
-h+=`<div class="dimension-card" style="border-color:#7c3aed"><h3>🔎 信息洞察力</h3><p>规律识别测试得分 <strong>${d.insightScore||50}/100</strong>。${(d.insightScore||50)>=75?'信息洞察力突出，善于从复杂数据中发现规律和本质。':(d.insightScore||50)>=50?'具备一定的信息分析和规律识别能力。':'信息洞察力有提升空间，建议加强逻辑训练和数据分析能力。'}</p><div class="score-bar"><div class="score-fill" style="width:${d.insightScore||50}%;background:#7c3aed"></div></div></div>`;
+h+=`<div class="dimension-card" style="border-color:#7c3aed"><h3>🔎 信息洞察力</h3><p>规律识别测试得分 <strong>${d.insightScore??50}/100</strong>。${(d.insightScore??50)>=75?'信息洞察力突出，善于从复杂数据中发现规律和本质。':(d.insightScore??50)>=50?'具备一定的信息分析和规律识别能力。':'信息洞察力有提升空间，建议加强逻辑训练和数据分析能力。'}</p><div class="score-bar"><div class="score-fill" style="width:${d.insightScore??50}%;background:#7c3aed"></div></div></div>`;
 h+=`<div class="dimension-card" style="border-color:#f97316"><h3>⚡ 手脑协调能力</h3><p>平均反应时间 <strong>${d.reactionAvg||'-'}ms</strong>，得分 <strong>${d.reactionScore}/100</strong>。${d.reactionScore>=70?'反应速度优秀，手脑协调能力突出。':d.reactionScore>=50?'反应速度处于正常水平。':'反应速度有提升空间。'}</p><div class="score-bar"><div class="score-fill" style="width:${d.reactionScore}%;background:#f97316"></div></div></div>`;
 h+=`<div class="dimension-card" style="border-color:#6366f1"><h3>🔍 观察注意力</h3><p>找差异游戏得分 <strong>${d.diffScore}/100</strong>。${d.diffScore>=70?'观察力敏锐，注意力集中，能快速发现细节差异。':d.diffScore>=50?'观察力处于正常水平。':'观察力有较大提升空间。'}</p><div class="score-bar"><div class="score-fill" style="width:${d.diffScore}%;background:#6366f1"></div></div></div>`;
 // Family
@@ -1341,6 +1968,9 @@ h+=`<p><strong>纹身情况：</strong>${d.tattoo}</p>`;
 if(d.generalObs)h+=`<p><strong>整体印象：</strong>${d.generalObs}</p>`;
 h+=`</div>`;}
 h+=`</div>`;
+if(d.hollandScores){
+h+=`<div class="card"><h2>🧭 职业兴趣分析（霍兰德模型）</h2>${getCareerRecommendations(d.hollandScores,d.mbtiType)}</div>`;
+}
 if(forManager){
 h+=`<div class="card"><h2>🎯 综合分析</h2>${generateComprehensiveAnalysis(d,dims)}</div>`;
 }
@@ -1374,13 +2004,13 @@ async function renderDashboard(){
 const results=await getResults();
 // Stats
 const total=results.length;
-const avgScore=total?Math.round(results.reduce((s,r)=>{const d=calcDimScores(r);return s+Object.values(d).reduce((a,b)=>a+b,0)/15;},0)/total):0;
+const avgScore=total?Math.round(results.reduce((s,r)=>{const d=calcDimScores(r);const v=Object.values(d);return s+v.reduce((a,b)=>a+b,0)/v.length;},0)/total):0;
 const thisMonth=results.filter(r=>{const d=new Date(r.timestamp);const n=new Date();return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear();}).length;
 document.getElementById('dashStats').innerHTML=`
 <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">候选人总数</div></div>
 <div class="stat-card"><div class="stat-num">${avgScore}</div><div class="stat-label">平均综合分</div></div>
 <div class="stat-card"><div class="stat-num">${thisMonth}</div><div class="stat-label">本月测评</div></div>
-<div class="stat-card"><div class="stat-num" style="color:${avgScore>=70?'#22c55e':avgScore>=50?'#f59e0b':'#ef4444'}">${total>0?(results.filter(r=>{const d=calcDimScores(r);return Object.values(d).reduce((a,b)=>a+b,0)/15>=70;}).length):0}</div><div class="stat-label">高分候选人</div></div>`;
+<div class="stat-card"><div class="stat-num" style="color:${avgScore>=70?'#22c55e':avgScore>=50?'#f59e0b':'#ef4444'}">${total>0?(results.filter(r=>{const d=calcDimScores(r);const v=Object.values(d);return v.reduce((a,b)=>a+b,0)/v.length>=70;}).length):0}</div><div class="stat-label">高分候选人</div></div>`;
 renderTable(results);
 }
 function renderTable(results){
@@ -1485,6 +2115,7 @@ initNav();
 renderMBTI();
 renderSJT();
 renderFC();
+renderHolland();
 // Update cloud status after a moment
 setTimeout(()=>{if(_cloudMode)updateCloudStatus(true);},500);
 </script>
