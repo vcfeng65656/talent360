@@ -1888,11 +1888,7 @@ const positionCompetency={
 };
 function calcJobMatch(d){
 const dims=calcDimScores(d);
-const allDimVals=Object.values(dims);
-const avg=allDimVals.reduce((a,b)=>a+b,0)/allDimVals.length;
-const strongDims=allDimVals.filter(v=>v>=75);
-const bonus=strongDims.length?Math.min(15,Math.round(strongDims.reduce((a,b)=>a+b,0)/strongDims.length*0.2*strongDims.length/14)):0;
-const composite=Math.min(100,Math.round(avg+bonus));
+const composite=calcComposite(dims);
 const pm=calcPositionMatch(d);
 const pos=(d.position||'').toLowerCase();
 let profile=null;
@@ -2357,17 +2353,18 @@ if(_cloudMode){await cloudGetResults();updateCloudStatus(true);}
 await renderDashboard();
 }
 async function backToDashboard(){showView('viewManager');await renderDashboard();}
+function calcComposite(dims){const vals=Object.values(dims);const avg=vals.reduce((a,b)=>a+b,0)/vals.length;const strong=vals.filter(v=>v>=75);const bonus=strong.length?Math.min(15,Math.round(strong.reduce((a,b)=>a+b,0)/strong.length*0.2*strong.length/14)):0;return Math.min(100,Math.round(avg+bonus));}
 async function renderDashboard(){
 const results=await getResults();
 // Stats
 const total=results.length;
-const avgScore=total?Math.round(results.reduce((s,r)=>{const d=calcDimScores(r);const v=Object.values(d);return s+v.reduce((a,b)=>a+b,0)/v.length;},0)/total):0;
+const avgScore=total?Math.round(results.reduce((s,r)=>{const d=calcDimScores(r);return s+calcComposite(d);},0)/total):0;
 const thisMonth=results.filter(r=>{const d=new Date(r.timestamp);const n=new Date();return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear();}).length;
 document.getElementById('dashStats').innerHTML=`
 <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-label">候选人总数</div></div>
 <div class="stat-card"><div class="stat-num">${avgScore}</div><div class="stat-label">平均综合分</div></div>
 <div class="stat-card"><div class="stat-num">${thisMonth}</div><div class="stat-label">本月测评</div></div>
-<div class="stat-card"><div class="stat-num" style="color:${avgScore>=70?'#22c55e':avgScore>=50?'#f59e0b':'#ef4444'}">${total>0?(results.filter(r=>{const d=calcDimScores(r);const v=Object.values(d);return v.reduce((a,b)=>a+b,0)/v.length>=70;}).length):0}</div><div class="stat-label">高分候选人</div></div>`;
+<div class="stat-card"><div class="stat-num" style="color:${avgScore>=70?'#22c55e':avgScore>=50?'#f59e0b':'#ef4444'}">${total>0?(results.filter(r=>{const d=calcDimScores(r);return calcComposite(d)>=70;}).length):0}</div><div class="stat-label">高分候选人</div></div>`;
 renderTable(results);
 }
 function renderTable(results){
@@ -2375,7 +2372,7 @@ if(!results){try{results=JSON.parse(localStorage.getItem(STORAGE_KEY))||[];}catc
 const search=(document.getElementById('searchBox').value||'').toLowerCase();
 const sort=document.getElementById('sortSelect').value;
 let filtered=results.filter(r=>(r.name||'').toLowerCase().includes(search)||(r.position||'').toLowerCase().includes(search));
-filtered.forEach(r=>{const d=calcDimScores(r);const vals=Object.values(d);r._avg=Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);});
+filtered.forEach(r=>{const d=calcDimScores(r);r._avg=calcComposite(d);});
 if(sort==='date-desc')filtered.sort((a,b)=>b.timestamp-a.timestamp);
 else if(sort==='date-asc')filtered.sort((a,b)=>a.timestamp-b.timestamp);
 else if(sort==='score-desc')filtered.sort((a,b)=>b._avg-a._avg);
