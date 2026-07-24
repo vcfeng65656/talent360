@@ -119,15 +119,18 @@ html,body{height:100%;margin:0}
 .version-badge{position:absolute;bottom:20px;right:28px;text-align:right;z-index:2}
 .version-badge .prod-code{font-size:14px;font-weight:700;color:rgba(255,255,255,.55);letter-spacing:2px;display:block}
 .version-badge .ver-num{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:1px;margin-top:2px;display:block}
-.landing-card{background:rgba(255,255,255,.97);border-radius:24px;padding:52px 44px 44px;max-width:500px;width:100%;text-align:center;box-shadow:0 30px 60px rgba(0,0,0,.3),0 0 0 1px rgba(255,255,255,.1);backdrop-filter:blur(20px);position:relative;z-index:1}
-.landing-card h1{font-size:28px;color:#1a2e4a;margin-bottom:6px;font-weight:800;letter-spacing:-.5px}
-.landing-card .tagline{color:#64748b;font-size:14px;margin-bottom:8px}
-.landing-card .card-brand{font-size:12px;color:#94a3b8;margin-bottom:32px}
-.role-btn{display:block;width:100%;padding:18px 20px;border:2px solid #e2e8f0;border-radius:16px;background:#fff;cursor:pointer;margin-bottom:14px;transition:all .25s;text-align:left}
-.role-btn:hover{border-color:#0d9488;box-shadow:0 8px 24px rgba(13,148,136,.15);transform:translateY(-2px)}
-.role-btn .role-icon{font-size:28px;margin-bottom:6px;display:block}
-.role-btn .role-title{font-size:17px;font-weight:700;color:#1e293b;display:block}
-.role-btn .role-desc{font-size:13px;color:#94a3b8;display:block;margin-top:4px}
+.landing-card{background:rgba(255,255,255,.97);border-radius:28px;padding:64px 56px 56px;max-width:640px;width:100%;text-align:center;box-shadow:0 30px 60px rgba(0,0,0,.3),0 0 0 1px rgba(255,255,255,.1);backdrop-filter:blur(20px);position:relative;z-index:1}
+.landing-card h1{font-size:34px;color:#1a2e4a;margin-bottom:10px;font-weight:800;letter-spacing:-.5px}
+.landing-card .tagline{color:#64748b;font-size:16px;margin-bottom:10px}
+.landing-card .card-brand{font-size:13px;color:#94a3b8;margin-bottom:40px}
+.role-btn{display:block;width:100%;padding:22px 28px;border:none;border-radius:16px;background:linear-gradient(135deg,#0d9488 0%,#1a4a7a 100%);cursor:pointer;margin-bottom:0;transition:all .3s;text-align:center;box-shadow:0 4px 16px rgba(13,148,136,.3)}
+.role-btn:hover{box-shadow:0 8px 32px rgba(13,148,136,.45);transform:translateY(-3px)}
+.role-btn .role-icon{font-size:32px;margin-bottom:8px;display:block}
+.role-btn .role-title{font-size:20px;font-weight:700;color:#fff;display:block}
+.role-btn .role-desc{font-size:14px;color:rgba(255,255,255,.8);display:block;margin-top:6px}
+.admin-trigger{position:absolute;top:24px;right:32px;z-index:3;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;opacity:.4}
+.admin-trigger:hover{opacity:1;background:rgba(255,255,255,.18);transform:scale(1.1)}
+.admin-trigger svg{width:16px;height:16px;fill:rgba(255,255,255,.7)}
 .pw-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center}
 .pw-overlay.show{display:flex}
 .pw-box{background:#fff;border-radius:16px;padding:36px;max-width:380px;width:90%;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,.2)}
@@ -203,14 +206,12 @@ body{background:#fff}
 <p class="card-brand">14维度画像 · 岗位场景考核 · MBTI+Holland双模型</p>
 <button class="role-btn" onclick="startCandidate()">
 <span class="role-icon">📝</span>
-<span class="role-title">我是候选人</span>
-<span class="role-desc">开始填写测评，完成后自动生成分析报告</span>
+<span class="role-title">人才测评入口</span>
+<span class="role-desc">开始填写测评，完成后自动生成个人分析报告</span>
 </button>
-<button class="role-btn" onclick="showPwDialog()">
-<span class="role-icon">📊</span>
-<span class="role-title">我是管理者</span>
-<span class="role-desc">查看所有候选人的测评报告和数据仪表盘</span>
-</button>
+</div>
+<div class="admin-trigger" onclick="showPwDialog()" title="管理端">
+<svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 00-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1112 8.4a3.6 3.6 0 010 7.2z"/></svg>
 </div>
 </div>
 </div>
